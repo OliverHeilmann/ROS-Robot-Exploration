@@ -6,3 +6,6 @@ build
 install
 log
 tmp
+
+# Topic things
+saved_images/*

@@ -14,6 +14,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # Define the executable with both source files
 set(EXECUTABLE_NAME brightness_node)
@@ -23,6 +24,7 @@ add_executable(${EXECUTABLE_NAME} src/brightness.cpp)
 ament_target_dependencies(${EXECUTABLE_NAME} 
   rclcpp
   sensor_msgs
+  std_msgs
 )
 
 # Include directories

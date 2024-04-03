@@ -59,6 +59,7 @@ ros2 node info [the-node]
 # To list all the topics
 ros2 topic list
 ros2 topic info [the-node]
+ros2 topic echo [the-topic]
 
 # To visualize the ROS graph
 rqt_graph
@@ -68,6 +69,15 @@ ROSBOT_SIM
 
 # To launch the simulation
 rviz2
+
+# To build a specific package
+colcon build --packages-select [the-package]
+
+# Install a ROS package
+sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
+
+# Call empty service (in this case to save the map)
+ros2 service call /save std_srvs/srv/Empty {}
 ```
 
 ## License
