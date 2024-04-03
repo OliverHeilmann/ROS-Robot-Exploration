@@ -50,6 +50,25 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 4. Follow the on-screen instructions to interact with the robotic system.
 
-## License
+## Useful Commands
+```sh
+# To list all the nodes
+ros2 node list
+ros2 node info [the-node]
 
+# To list all the topics
+ros2 topic list
+ros2 topic info [the-node]
+
+# To visualize the ROS graph
+rqt_graph
+
+# Created alias for launching the Gazebo simulation
+ROSBOT_SIM
+
+# To launch the simulation
+rviz2
+```
+
+## License
 This project is licensed under the [MIT License](LICENSE).
