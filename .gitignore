@@ -1,2 +1,8 @@
 # ignore submodules content
 modules/*
+
+# general
+build
+install
+log
+tmp
