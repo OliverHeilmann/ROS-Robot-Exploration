@@ -1,0 +1,19 @@
+# to launch, use:
+#   ros2 launch package launch_file [arguments]
+
+# This is a launch file that launches two nodes, talker and listener.
+launch:
+  - arg:
+      name: "run_listener"
+      default: "true"
+
+  - node:
+      pkg: "demo_nodes_cpp"
+      exec: "talker"
+      name: "talker_node"
+
+  - node:
+      if: "$(var run_listener)"
+      pkg: "demo_nodes_cpp"
+      exec: "listener"
+      name: "listener_node"

@@ -1,2 +1,1 @@
-# Set up your environment by sourcing the following file
-source /opt/ros/humble/setup.bash
+ros2 launch launch/talker-listener.yaml
