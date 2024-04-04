@@ -78,6 +78,7 @@ sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
 
 # Call empty service (in this case to save the map)
 ros2 service call /save std_srvs/srv/Empty {}
+ros2 service call /image_counter std_srvs/srv/Trigger {}
 ```
 
 ## License

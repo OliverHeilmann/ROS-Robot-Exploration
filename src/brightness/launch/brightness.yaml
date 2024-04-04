@@ -18,6 +18,9 @@ launch:
       remap:
         - from: "/image"
           to: "/camera/color/image_raw"
+      param:
+        - name: "timer_period_s"
+          value: 2
 
   - node:
       pkg: "image_view"

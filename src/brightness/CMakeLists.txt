@@ -15,6 +15,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
 
 # Define the executable with both source files
 set(EXECUTABLE_NAME brightness_node)
@@ -25,6 +26,7 @@ ament_target_dependencies(${EXECUTABLE_NAME}
   rclcpp
   sensor_msgs
   std_msgs
+  std_srvs
 )
 
 # Include directories
@@ -33,9 +35,15 @@ target_include_directories(${EXECUTABLE_NAME} PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
+# Install the executable into the package (so it can be called with ros2 run pkg ...)
 install(TARGETS
   ${EXECUTABLE_NAME}
   DESTINATION lib/${PROJECT_NAME}
 )
+
+# Install the launch files into the package  (so it can be called with ros2 launch pkg ...)
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME})
 
 ament_package()
