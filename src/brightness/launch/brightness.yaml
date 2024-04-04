@@ -35,4 +35,4 @@ launch:
         - name: "save_all_image"
           value: false
         - name: "filename_format"
-          value: "./saved_images/image%04d.%s"
+          value: "/home/parallels/ROS-Robot-Exploration/src/brightness/saved_images/image%04d.%s"

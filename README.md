@@ -2,6 +2,10 @@
 
 This project aims to build a robotic system using ROS2 and Husarion ROSbot for autonomous exploration and key item detection in an area.
 
+## Progress So Far
+![RViz Screenshot](images/rvis.png)
+
+
 ## Requirements
 
 - ROS2: Make sure you have ROS2 installed on your system. You can follow the installation instructions from the official ROS2 documentation: [ROS2 Humble Installation Guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
@@ -70,6 +74,9 @@ ROSBOT_SIM
 # To launch the simulation
 rviz2
 
+# To inspect logged information with a UI
+ros2 run plotjuggler plotjuggler
+
 # To build a specific package
 colcon build --packages-select [the-package]
 
@@ -79,6 +86,9 @@ sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
 # Call empty service (in this case to save the map)
 ros2 service call /save std_srvs/srv/Empty {}
 ros2 service call /image_counter std_srvs/srv/Trigger {}
+
+# Get specific field information from an echo terminal command
+ros2 topic echo /odometry/filtered --field pose.pose
 ```
 
 ## License
