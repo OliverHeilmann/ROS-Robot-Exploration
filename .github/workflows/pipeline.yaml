@@ -20,32 +20,17 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v4
       
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
-      - name: Set up ROS2 environment
+      - name: Set up ROS2 and Husarian submodule
         run: |
-          sudo apt update && sudo apt install software-properties-common lsb-release -y
-          sudo apt install software-properties-common
-          sudo add-apt-repository universe
-          sudo apt update && sudo apt install curl -y
-          sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-          sudo apt update
-          sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake python3-pip python3-colcon-common-extensions python3-vcstool python3-rosdep
-          sudo rosdep init
-          source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
-        shell: bash
-
-      - name: Set up Husarian submodule
-        run: |
-          source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
           git submodule update --init --recursive
           sh setup.sh
         shell: bash
 
       - name: Build ROS2 project
         run: |
-          rosdep
+          source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
           colcon build --symlink-install
 
       - name: List output files
