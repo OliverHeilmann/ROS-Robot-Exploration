@@ -18,6 +18,7 @@ jobs:
 
       - name: Set up ROS2 environment
         run: |
+          sudo apt install python3-colcon-common-extensions -y
           sudo apt install software-properties-common
           sudo add-apt-repository universe
           sudo apt update && sudo apt install curl -y
@@ -27,6 +28,12 @@ jobs:
           sudo apt install ros-humble-ros-base -y
           source /opt/ros/humble/setup.bash
           echo 'source ~/ROS-Robot-Exploration/install/setup.bash' >> ~/.bashrc
+
+      - name: Set up Husarian submodule
+        run: |
+          git submodule update --init --recursive
+          sudo apt install python3-vcstool -y
+          sh setup.sh
 
       - name: Build ROS2 project
         run: |
