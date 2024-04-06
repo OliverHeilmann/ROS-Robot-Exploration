@@ -3,9 +3,9 @@
 <package format="3">
   <name>rosbot</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Package for testing and running ROSbot functions</description>
   <maintainer email="oheilmann5@gmail.com">parallels</maintainer>
-  <license>TODO: License declaration</license>
+  <license>See README.md</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
