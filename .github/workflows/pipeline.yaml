@@ -25,7 +25,6 @@ jobs:
       - name: Set up ROS2 environment
         run: |
           sudo apt update && sudo apt install software-properties-common lsb-release -y
-          sudo apt install software-properties-common
           sudo add-apt-repository universe
           sudo apt update && sudo apt install curl -y
           sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
@@ -33,6 +32,9 @@ jobs:
           sudo apt update
           sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake
           source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
+          sudo rosdep init
+          rosdep update --rosdistro $ROS_DISTRO
+          rosdep install --from-paths src --ignore-src -r -y
         shell: bash
 
       - name: Install system dependencies
