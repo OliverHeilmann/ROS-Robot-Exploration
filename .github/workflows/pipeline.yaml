@@ -1,18 +1,43 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: ROS2 Build Pipeline
+run-name: ${{ github.actor }} / ${{ github.event_name }} / ${{ github.workflow }} / ${{ github.run_number }}
+
+# Controls when the action will run.
+on:
+  push:
+    branches:
+      - main
+      # - dev
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Explore-GitHub-Actions:
+  ROS2-Build-Test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Checkout repository code
         uses: actions/checkout@v4
+      
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      
+      - name: Set up ROS2 environment
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          sudo apt install software-properties-common
+          sudo add-apt-repository universe
+          sudo apt update && sudo apt install curl -y
+          sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+          sudo apt update
+          sudo apt update
+          sudo apt install ros-humble-ros-base
+          source /opt/ros/humble/setup.bash
+          echo 'source ~/ROS-Robot-Exploration/install/setup.bash' >> ~/.bashrc
+
+      - name: Build ROS2 project
+        run: |
+          colcon build --symlink-install
+
+      - name: List output files
+        run: |
+          echo "Listing build output..."
+          ls install/
