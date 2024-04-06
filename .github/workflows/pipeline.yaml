@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v4
       
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
       - name: Set up ROS2 environment
         run: |
@@ -45,7 +45,6 @@ jobs:
 
       - name: Build ROS2 project
         run: |
-          rosdep
           colcon build --symlink-install
 
       - name: List output files
