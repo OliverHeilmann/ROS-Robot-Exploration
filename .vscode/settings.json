@@ -76,5 +76,40 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp"
-    }
+    },
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/build/rqt_joint_trajectory_controller",
+        "${workspaceFolder}/install/rqt_joint_trajectory_controller/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_utils",
+        "${workspaceFolder}/install/rosbot_xl_utils/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_gazebo",
+        "${workspaceFolder}/install/rosbot_xl_gazebo/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_bringup",
+        "${workspaceFolder}/install/rosbot_xl_bringup/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_controller",
+        "${workspaceFolder}/install/rosbot_xl_controller/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/ros2_controllers_test_nodes",
+        "${workspaceFolder}/install/ros2_controllers_test_nodes/lib/python3.10/site-packages",
+        "${workspaceFolder}/install/micro_ros_msgs/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/build/rqt_joint_trajectory_controller",
+        "${workspaceFolder}/install/rqt_joint_trajectory_controller/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_utils",
+        "${workspaceFolder}/install/rosbot_xl_utils/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_gazebo",
+        "${workspaceFolder}/install/rosbot_xl_gazebo/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_bringup",
+        "${workspaceFolder}/install/rosbot_xl_bringup/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/rosbot_xl_controller",
+        "${workspaceFolder}/install/rosbot_xl_controller/lib/python3.10/site-packages",
+        "${workspaceFolder}/build/ros2_controllers_test_nodes",
+        "${workspaceFolder}/install/ros2_controllers_test_nodes/lib/python3.10/site-packages",
+        "${workspaceFolder}/install/micro_ros_msgs/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "cmake.configureOnOpen": true
 }

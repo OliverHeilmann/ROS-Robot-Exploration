@@ -8,4 +8,4 @@ log
 tmp
 
 # Topic things
-saved_images/*
+src/**/saved_images/*

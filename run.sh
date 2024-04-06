@@ -1,5 +1,14 @@
-# ros2 launch launch/talker-listener.yaml
+# build the workspace package 'brightness' only - exit if build fails
+colcon build --packages-select brightness --symlink-install || exit 1
 
-colcon build --packages-select brightness --symlink-install
+# Run the brightness node using ros2 run
 # ros2 run brightness brightness_node --ros-args -r /image:=/camera/color/image_raw
-ros2 launch launch/brightness.yaml 
+
+# Run the brightness node using launch file
+ros2 launch brightness brightness.yaml 
+
+# Open the Gazebo Simulator in a new terminal
+ROSBOT_SIM
+
+# Open the Rviz2
+rvis2 -d src/brightness/rviz/rosbot.rviz

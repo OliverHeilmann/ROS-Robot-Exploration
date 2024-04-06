@@ -5,7 +5,6 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 ## Progress So Far
 ![RViz Screenshot](images/rvis.png)
 
-
 ## Requirements
 
 - ROS2: Make sure you have ROS2 installed on your system. You can follow the installation instructions from the official ROS2 documentation: [ROS2 Humble Installation Guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
@@ -72,7 +71,7 @@ rqt_graph
 ROSBOT_SIM
 
 # To launch the simulation
-rviz2
+rviz2 -d ~/[path-to-rviz-file]/rosbot.rviz
 
 # To inspect logged information with a UI
 ros2 run plotjuggler plotjuggler
