@@ -1,0 +1,12 @@
+# to launch, use:
+#   ros2 launch package launch_file [arguments]
+
+# This is a launch file that starts the tracker node used for tracking objects in a scene
+launch:
+  - node:
+      pkg: "rosbot"
+      exec: "tracker"
+      name: "tracker"
+      remap:
+        - from: "/image"
+          to: "/camera/color/image_raw"

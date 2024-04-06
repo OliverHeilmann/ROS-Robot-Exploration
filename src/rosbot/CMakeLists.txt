@@ -11,33 +11,47 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
+find_package(OpenCV REQUIRED)
+find_package(cv_bridge REQUIRED)
+
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 
-# Define the executable with both source files
-set(EXECUTABLE_NAME rosbot)
-add_executable(${EXECUTABLE_NAME} src/brightness.cpp)
+# Include directories
+include_directories(
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
 
-# Specify dependencies for the executable
-ament_target_dependencies(${EXECUTABLE_NAME} 
+# Define the executable for brightness with dependencies
+set(EXECUTABLE_NAME_1 brightness)
+add_executable(${EXECUTABLE_NAME_1} src/brightness.cpp)
+ament_target_dependencies(${EXECUTABLE_NAME_1} 
   rclcpp
   sensor_msgs
   std_msgs
   std_srvs
 )
 
-# Include directories
-target_include_directories(${EXECUTABLE_NAME} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>
+# Define the executable for tracker with dependencies
+set(EXECUTABLE_NAME_2 tracker)
+add_executable(${EXECUTABLE_NAME_2} src/tracker.cpp)
+ament_target_dependencies(${EXECUTABLE_NAME_2}
+  rclcpp
+  OpenCV
+  cv_bridge
+  geometry_msgs
+  sensor_msgs
+  std_msgs
 )
 
 # Install the executable into the package (so it can be called with ros2 run pkg ...)
 install(TARGETS
-  ${EXECUTABLE_NAME}
+  ${EXECUTABLE_NAME_1}
+  ${EXECUTABLE_NAME_2}
   DESTINATION lib/${PROJECT_NAME}
 )
 

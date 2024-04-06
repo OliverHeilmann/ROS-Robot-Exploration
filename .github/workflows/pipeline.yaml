@@ -31,10 +31,17 @@ jobs:
           sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
           sudo apt update
-          sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake python3-pip python3-colcon-common-extensions python3-vcstool python3-rosdep
+          sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake
           sudo rosdep init
+          rosdep install --from-paths src --ignore-src -r -y
           source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
         shell: bash
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install -y python3-pip python3-colcon-common-extensions python3-vcstool python3-rosdep
+          sudo apt-get install -y libopencv-dev
 
       - name: Set up Husarian submodule
         run: |

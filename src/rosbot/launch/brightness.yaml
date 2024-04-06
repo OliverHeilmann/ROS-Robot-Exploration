@@ -1,7 +1,7 @@
 # to launch, use:
 #   ros2 launch package launch_file [arguments]
 
-# This is a launch file that launches two nodes, talker and listener.
+# This is a launch file that launches a node for measuring brightness of an image and another node for saving images
 launch:
   - arg:
       name: "run_listener"
@@ -12,9 +12,9 @@ launch:
       default: "false"
 
   - node:
-      pkg: "brightness"
-      exec: "brightness_node"
-      name: "brightness_node"
+      pkg: "rosbot"
+      exec: "brightness"
+      name: "brightness"
       remap:
         - from: "/image"
           to: "/camera/color/image_raw"
@@ -35,4 +35,4 @@ launch:
         - name: "save_all_image"
           value: false
         - name: "filename_format"
-          value: "/home/parallels/ROS-Robot-Exploration/src/brightness/saved_images/image%04d.%s"
+          value: "/home/parallels/ROS-Robot-Exploration/src/rosbot/saved_images/image%04d.%s"
