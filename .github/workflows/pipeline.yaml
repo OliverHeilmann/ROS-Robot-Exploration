@@ -1,14 +1,14 @@
 name: ROS2 Build Pipeline
 
 on:
-  push:
-    branches:
-      # - main  # don't need to test on main because it's already tested on PR and main cannot be pushed to directly
-      # - dev
   pull_request:
     branches:
       - main
       # - dev
+  # push:
+  #   branches:
+  #     - main  # don't need to test on main because it's already tested on PR and main cannot be pushed to directly
+  #     - dev
 
 jobs:
   build:
