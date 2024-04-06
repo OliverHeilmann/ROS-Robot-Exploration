@@ -22,7 +22,7 @@ jobs:
 
       - name: Set up ROS2 environment
         run: |
-          sudo apt install python3-colcon-common-extensions -y
+          sudo apt update && sudo apt install software-properties-common lsb-release -y
           sudo apt install software-properties-common
           sudo add-apt-repository universe
           sudo apt update && sudo apt install curl -y
@@ -32,6 +32,11 @@ jobs:
           sudo apt install ros-humble-ros-base -y
           source /opt/ros/humble/setup.bash
           echo 'source ~/ROS-Robot-Exploration/install/setup.bash' >> ~/.bashrc
+
+      - name: Install colcon
+        run: |
+          sudo apt update && sudo apt install python3-pip -y
+          pip3 install -U colcon-common-extensions
 
       - name: Set up Husarian submodule
         run: |
