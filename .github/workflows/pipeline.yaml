@@ -19,11 +19,6 @@ jobs:
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4
-
-      - name: Ensure ROS2 environment is the correct distribution (based on the ROS_DISTRO environment variable)
-        uses: ros-tooling/setup-ros@v0.2
-        with:
-          required-ros-distributions: ${{ env.ROS_DISTRO }}
       
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
 
