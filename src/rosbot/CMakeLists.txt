@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(brightness)
+project(rosbot)
 
 # Set C++ standard to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -18,7 +18,7 @@ find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 
 # Define the executable with both source files
-set(EXECUTABLE_NAME brightness_node)
+set(EXECUTABLE_NAME rosbot)
 add_executable(${EXECUTABLE_NAME} src/brightness.cpp)
 
 # Specify dependencies for the executable
