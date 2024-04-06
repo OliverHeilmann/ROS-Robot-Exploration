@@ -32,9 +32,6 @@ jobs:
           sudo apt update
           sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake
           source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
-          sudo rosdep init
-          rosdep update --rosdistro $ROS_DISTRO
-          rosdep install --from-paths src --ignore-src -r -y
         shell: bash
 
       - name: Install system dependencies
@@ -42,6 +39,9 @@ jobs:
           sudo apt-get update
           sudo apt install -y python3-pip python3-colcon-common-extensions python3-vcstool python3-rosdep
           sudo apt-get install -y libopencv-dev
+          sudo rosdep init
+          rosdep update --rosdistro $ROS_DISTRO
+          rosdep install --from-paths src --ignore-src -r -y
 
       - name: Set up Husarian submodule
         run: |
