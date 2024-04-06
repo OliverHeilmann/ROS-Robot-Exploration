@@ -11,4 +11,4 @@ ros2 launch rosbot brightness.yaml
 ROSBOT_SIM
 
 # Open the Rviz2
-rvis2 -d src/rosbot/rviz/rosbot.rviz
+rviz2 -d src/rosbot/rviz/rosbot.rviz
