@@ -128,6 +128,20 @@ If you want to access ROS2 nodes over the internet, [Husarian](https://husarion.
 
 Some interesting suggestions for security across the ROS2 network are mentioned in this [LinkedIn](https://www.linkedin.com/advice/0/how-can-you-secure-your-ros-system-from-cyber-threats-hgw0c) article. including [rosauth](https://wiki.ros.org/rosauth), [sros](https://docs.ros.org/en/rolling/Tutorials/Advanced/Security/Introducing-ros2-security.html), or [rosbridge_suite](https://github.com/RobotWebTools/rosbridge_suite/blob/ros2/README.md).
 
+## Transformations
+
+In separate terminals, run the following commands to create static transformations between the map, robot, and camera frames and visualize them in RViz:
+```sh
+# Create static transformations between the map, robot, and camera frames
+ros2 run tf2_ros static_transform_publisher --frame-id map --child-frame-id robot --x 1 --y -1 --yaw 1.6
+
+# Create static transformations between the robot and camera frames
+ros2 run tf2_ros static_transform_publisher --frame-id robot --child-frame-id reverse_camera --z 0.2 --yaw 3.14 
+
+# Visualize the transformations in RViz
+rviz2 -d src/rosbot/rviz/tf.rviz 
+```
+
 
 ## License
 This project is licensed under the [MIT License](LICENSE).

@@ -1,0 +1,9 @@
+# to launch, use:
+#   ros2 launch package launch_file [arguments]
+
+# This is a launch file that starts the tf_broadcaster node used for tracking objects in a scene
+launch:
+  - node:
+      pkg: "rosbot"
+      exec: "tf_broadcaster"
+      name: "tf_broadcaster"
