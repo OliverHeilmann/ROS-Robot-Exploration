@@ -93,5 +93,41 @@ ros2 service call /image_counter std_srvs/srv/Trigger {}
 ros2 topic echo /odometry/filtered --field pose.pose
 ```
 
+## Networking with ROS2
+
+ROS will work over LAN so, if you have two devices on the same network, you will be able to publish and subscribe to the same topics i.e. they are visible to one another. See example below:
+```sh
+# ROSbot: Create a /msg topic and send send at rate=1s
+ros2 topic pub -r 1 /msg std_msgs/msg/String data:\ 'Hello, ROSbot here'
+
+# Laptop: Echo the /msg topic
+ros2 topic echo /msg
+```
+
+Using `ROS_DISCOVERY_SERVER` segregates 'robot networks' within the same LAN. Instead of depending on the standard multicast-based LAN discovery, which is the default for DDS, you have the option to transition to the Discovery Server approach for DDS discovery.
+     
+```sh
+# ROSbot: Start the Discovery Server
+fastdds discovery --server-id 0 --port 11888
+
+export ROS_DISCOVERY_SERVER="10.5.10.130:11888"
+ros2 daemon stop # reload ROS 2 daemon
+
+ros2 run demo_nodes_cpp talker
+```
+
+```sh
+# Laptop: Start the Discovery Server
+export ROS_DISCOVERY_SERVER="10.5.10.130:11888"
+ros2 daemon stop # reload ROS 2 daemon
+
+ros2 run demo_nodes_cpp listener
+```
+
+If you want to access ROS2 nodes over the internet, [Husarian](https://husarion.com/tutorials/ros2-tutorials/6-robot-network/#connecting-ros-2-via-internet) provides a tutorial on how to do this using their cloud service. It is essentially a VPN service that allows you to connect to your robot from anywhere in the world.
+
+Some interesting suggestions for security across the ROS2 network are mentioned in this [LinkedIn](https://www.linkedin.com/advice/0/how-can-you-secure-your-ros-system-from-cyber-threats-hgw0c) article. including [rosauth](https://wiki.ros.org/rosauth), [sros](https://docs.ros.org/en/rolling/Tutorials/Advanced/Security/Introducing-ros2-security.html), or [rosbridge_suite](https://github.com/RobotWebTools/rosbridge_suite/blob/ros2/README.md).
+
+
 ## License
 This project is licensed under the [MIT License](LICENSE).
