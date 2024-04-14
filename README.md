@@ -4,6 +4,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 ## Progress So Far
 
+![RViz Screenshot 4](images/2D-Slam.png)
 ![RViz Screenshot 3](images/transforms.png)
 ![RViz Screenshot 2](images/KCF-tracking.png)
 <!-- ![RViz Screenshot 1](images/rvis.png) -->
@@ -36,25 +37,29 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 1. Clone the repository:
 
-     ```bash
-     git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration
-     ```
+    ```bash
+    git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration
+    ```
 
 2. Build the project:
 
-     ```bash
-     cd ROS-Robot-Exploration
-     colcon build
-     ```
+    ```bash
+    cd ROS-Robot-Exploration
+    colcon build
+    ```
 
 3. Launch the exploration and detection nodes:
 
-     ```bash
-     source install/setup.bash
-     ros2 launch exploration_detection.launch.py
-     ```
+    ```bash
+    source install/setup.bash
+    ros2 launch exploration_detection.launch.py
+    ```
 
-4. Follow the on-screen instructions to interact with the robotic system.
+4. Drive the robot around using your keyboard. Run the teleop_twist_keyboard executable as shown below:
+    
+    ```bash
+    ros2 run teleop_twist_keyboard teleop_twist_keyboard
+    ```
 
 ## Useful Commands
 

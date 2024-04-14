@@ -79,7 +79,11 @@ install(TARGETS
 
 # Install the launch files into the package  (so it can be called with ros2 launch pkg ...)
 install(DIRECTORY
+  config
   launch
+  saved_images
+  maps
+  rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
