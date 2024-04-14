@@ -142,6 +142,19 @@ ros2 run tf2_ros static_transform_publisher --frame-id robot --child-frame-id re
 rviz2 -d src/rosbot/rviz/tf.rviz 
 ```
 
+Alternatively, you can create a launch file to run all the commands at once. Below is an example of the contents of this launch file:
+```xml
+<launch>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_robot" args="--frame-id map --child-frame-id robot --x 1 --y -1 --yaw 1.6" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="robot_to_camera" args="--frame-id robot --child-frame-id reverse_camera --z 0.2 --yaw 3.14" />
+</launch>
+```
+
+Another example shows how a transformation can occur over time, where the robot moves in a circle about the map centre coordinates. Use the launch file as shown below to observe this:
+```sh
+ros2 launch rosbot tf_broadcaster.yaml
+```
+
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
