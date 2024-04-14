@@ -1,0 +1,16 @@
+# to launch, use:
+#   ros2 launch package launch_file [arguments]
+
+# This is a launch file that starts the tf_broadcaster and tf_listener nodes. User should see the listener calculate 
+# the yaw angle of the robot relative to the world frame. Use RVIZ to visualize the tf frame transforms (but will 
+# work without it too).
+launch:
+  - node:
+      pkg: "rosbot"
+      exec: "tf_broadcaster"
+      name: "tf_broadcaster"
+
+  - node:
+      pkg: "rosbot"
+      exec: "tf_listener"
+      name: "tf_listener"
