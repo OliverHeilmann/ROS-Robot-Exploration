@@ -161,6 +161,21 @@ Another example shows how a transformation can occur over time, where the robot 
 ros2 launch rosbot tf_broadcaster.yaml
 ```
 
+## SLAM
+To perform SLAM, you can use the `slam_toolbox` package. This package provides a set of tools for 2D and 3D SLAM. To install the package, run the following command:
+
+```sh
+sudo apt-get install ros-<distro>-slam-toolbox
+```
+
+To run the SLAM toolbox, use the following command:
+
+```sh
+ros2 launch tutorial_pkg slam.launch.py use_sim_time:=true
+
+# To visualize the map in RViz
+rviz2 -d src/rosbot/rviz/slam.rviz
+```
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
