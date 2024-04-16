@@ -1,0 +1,11 @@
+slam-toolbox:
+  ubuntu:
+    focal:
+      apt:
+        packages: [ros-foxy-slam-toolbox]
+    bionic:
+      apt:
+        packages: [ros-eloquent-slam-toolbox]
+    jammy:
+      apt:
+        packages: [ros-humble-slam-toolbox]

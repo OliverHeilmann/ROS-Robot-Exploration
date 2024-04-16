@@ -34,14 +34,18 @@ jobs:
           source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
         shell: bash
 
-      - name: Install system dependencies
+      - name: Install system dependencies and update Rosdep sources with custom sources
         run: |
           sudo apt-get update
           sudo apt install -y python3-pip python3-colcon-common-extensions python3-vcstool python3-rosdep
           sudo apt-get install -y libopencv-dev
           sudo rosdep init
+
+          chmod +x src/rosbot/custom_rosdep/update_sources.sh
+          ./src/rosbot/custom_rosdep/update_sources.sh
+
           rosdep update --rosdistro $ROS_DISTRO
-          rosdep install --from-paths src --ignore-src -r -y
+          rosdep install --from-paths src --ignore-src -r -y --rosdistro ${{ env.ROS_DISTRO }}
 
       - name: Set up Husarian submodule
         run: |

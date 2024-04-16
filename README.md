@@ -91,6 +91,12 @@ colcon build --packages-select [the-package]
 # Install a ROS package
 sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
 
+# Create a ROS package
+ros2 pkg create [package-name] --build-type ament_cmake --dependencies [the-dependencies]
+
+# List your packages
+colcon list
+
 # Call empty service (in this case to save the map)
 ros2 service call /save std_srvs/srv/Empty {}
 ros2 service call /image_counter std_srvs/srv/Trigger {}
@@ -171,7 +177,7 @@ sudo apt-get install ros-<distro>-slam-toolbox
 To run the SLAM toolbox, use the following command:
 
 ```sh
-ros2 launch tutorial_pkg slam.launch.py use_sim_time:=true
+ros2 launch rosbot slam.launch.py use_sim_time:=true
 
 # To visualize the map in RViz
 rviz2 -d src/rosbot/rviz/slam.rviz
