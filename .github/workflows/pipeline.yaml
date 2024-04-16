@@ -44,8 +44,15 @@ jobs:
           chmod +x src/rosbot/custom_rosdep/update_sources.sh
           ./src/rosbot/custom_rosdep/update_sources.sh
 
+          echo "----------------------------------------------------------------------------------------"
+
           rosdep update --rosdistro $ROS_DISTRO
+
+          echo "----------------------------------------------------------------------------------------"
+
           rosdep install --from-paths src --ignore-src -r -y --rosdistro ${{ env.ROS_DISTRO }}
+
+          echo "----------------------------------------------------------------------------------------"
 
       - name: Set up Husarian submodule
         run: |
