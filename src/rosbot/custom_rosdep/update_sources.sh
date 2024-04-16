@@ -25,3 +25,9 @@ fi
 
 # Update rosdep to recognise changes
 rosdep update
+
+# Cleanup
+sudo apt update
+sudo apt autoremove
+sudo apt autoclean
+sudo apt install -f
