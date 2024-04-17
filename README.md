@@ -4,6 +4,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 ## Progress So Far
 
+![RViz Screenshot 5](images/amcl.png)
 ![RViz Screenshot 4](images/2D-Slam.png)
 ![RViz Screenshot 3](images/transforms.png)
 ![RViz Screenshot 2](images/KCF-tracking.png)
@@ -33,6 +34,19 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
     Replace `<distro>` with the ROS2 distribution you are using (e.g., foxy, galactic) and `<package-name>` with the name of the required ROS2 package.
 
+- ROS2 dependencies Will think how best to install these for the developer, perhaps a bash script or put into `package.xml` if possible/ where applicable.
+    
+    ```sh
+    sudo apt install ros-$ROS_DISTRO-teleop-twist-keyboard
+    sudo apt install ros-$ROS_DISTRO-slam-toolbox
+    sudo apt install ros-$ROS_DISTRO-navigation2
+    sudo apt install ros-$ROS_DISTRO-nav2-bringup
+
+    # Wayland package for RViz and mapping visualisation tools
+    sudo apt install qt6-wayland
+    export QT_QPA_PLATFORM=xcb
+    ```
+
 ## Getting Started
 
 1. Clone the repository:
@@ -60,50 +74,6 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
     ```bash
     ros2 run teleop_twist_keyboard teleop_twist_keyboard
     ```
-
-## Useful Commands
-
-```sh
-# To list all the nodes
-ros2 node list
-ros2 node info [the-node]
-
-# To list all the topics
-ros2 topic list
-ros2 topic info [the-node]
-ros2 topic echo [the-topic]
-
-# To visualize the ROS graph
-rqt_graph
-
-# Created alias for launching the Gazebo simulation
-ROSBOT_SIM
-
-# To launch the simulation
-rviz2 -d ~/[path-to-rviz-file]/rosbot.rviz
-
-# To inspect logged information with a UI
-ros2 run plotjuggler plotjuggler
-
-# To build a specific package
-colcon build --packages-select [the-package]
-
-# Install a ROS package
-sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
-
-# Create a ROS package
-ros2 pkg create [package-name] --build-type ament_cmake --dependencies [the-dependencies]
-
-# List your packages
-colcon list
-
-# Call empty service (in this case to save the map)
-ros2 service call /save std_srvs/srv/Empty {}
-ros2 service call /image_counter std_srvs/srv/Trigger {}
-
-# Get specific field information from an echo terminal command
-ros2 topic echo /odometry/filtered --field pose.pose
-```
 
 ## Networking with ROS2
 
@@ -167,7 +137,7 @@ Another example shows how a transformation can occur over time, where the robot 
 ros2 launch rosbot tf_broadcaster.yaml
 ```
 
-## SLAM
+## SLAM and AMCL
 To perform SLAM, you can use the `slam_toolbox` package. This package provides a set of tools for 2D and 3D SLAM. To install the package, run the following command:
 
 ```sh
@@ -181,6 +151,66 @@ ros2 launch rosbot slam.launch.py use_sim_time:=true
 
 # To visualize the map in RViz
 rviz2 -d src/rosbot/rviz/slam.rviz
+
+# To load a saved map, navigate to the map directory and run the below command
+ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=[your-map-name].yaml
+
+# Then run the map server to load it into RVIZ
+ros2 run nav2_util lifecycle_bringup map_server
+```
+
+To use `Adaptive Monte Carlo Location` with ROS2, we can use the `amcl` package. This package provides a probabilistic localisation system for a robot moving in 2D. To run this package, use the following command (after running Gazebo):
+
+```sh
+# Launch Gazebo simulator
+ROSBOT_SIM
+
+# To launch the AMCL package
+ros2 launch rosbot amcl.launch.py
+```
+
+## Useful Commands
+
+```sh
+# To list all the nodes
+ros2 node list
+ros2 node info [the-node]
+
+# To list all the topics
+ros2 topic list
+ros2 topic info [the-node]
+ros2 topic echo [the-topic]
+
+# To visualize the ROS graph
+rqt_graph
+
+# Created alias for launching the Gazebo simulation
+ROSBOT_SIM
+
+# To launch the simulation
+rviz2 -d ~/[path-to-rviz-file]/rosbot.rviz
+
+# To inspect logged information with a UI
+ros2 run plotjuggler plotjuggler
+
+# To build a specific package
+colcon build --packages-select [the-package]
+
+# Install a ROS package
+sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
+
+# Create a ROS package
+ros2 pkg create [package-name] --build-type ament_cmake --dependencies [the-dependencies]
+
+# List your packages
+colcon list
+
+# Call empty service (in this case to save the map)
+ros2 service call /save std_srvs/srv/Empty {}
+ros2 service call /image_counter std_srvs/srv/Trigger {}
+
+# Get specific field information from an echo terminal command
+ros2 topic echo /odometry/filtered --field pose.pose
 ```
 
 ## License
