@@ -21,6 +21,7 @@ find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 # Include directories
 include_directories(
@@ -77,10 +78,22 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install the launch files into the package  (so it can be called with ros2 launch pkg ...)
-install(DIRECTORY
+# Install the directories into the package  (so it can be called with ros2 launch pkg ...)
+function(install_dirs)
+  foreach(dir IN LISTS ARGN)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${dir}")
+      install(DIRECTORY ${dir} DESTINATION share/${PROJECT_NAME})
+    endif()
+  endforeach()
+endfunction()
+
+# now use the above function
+install_dirs(
+  config
   launch
-  DESTINATION share/${PROJECT_NAME}
+  saved_images
+  maps
+  rviz
 )
 
 ament_package()
