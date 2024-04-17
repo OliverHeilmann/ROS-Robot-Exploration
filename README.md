@@ -43,6 +43,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
     sudo apt install ros-$ROS_DISTRO-navigation2
     sudo apt install ros-$ROS_DISTRO-nav2-bringup
     sudo apt install ros-$ROS_DISTRO-rqt-graph
+    sudo apt install ros-$ROS_DISTRO-teleop-twist-joy ros-$ROS_DISTRO-joy  joystick jstest-gtk evtest
 
     # Wayland package for RViz and mapping visualisation tools
     sudo apt install qt6-wayland
@@ -195,6 +196,27 @@ More detail (and links to even further detail) can be found on [Husarion Docs](h
 - `planner_server` - related to the selection and fine-tuning of the global path,
 - `waypoint_follower` - related to following a multi-point route,
 - `velocity_smoother` - to smooth out the robot's motion.
+
+
+## Joystick Robot Control
+Use a joystick to control the robot. The `joy` package provides a node that interfaces with a joystick and publishes the joystick commands to the `/joy` topic. To use the package, run the following commands:
+
+```sh
+# See if you have a connected controller visible by the system
+evtest
+
+# See which controllers are connected, and which ID you want to use
+ros2 run joy joy_enumerate_devices
+
+# Run the joy node to publish joystick commands to the /joy topic
+ros2 run joy joy_node
+
+# To see the joystick commands, run the following command
+ros2 topic echo /joy
+
+# When you have the joystick commands, you can use the teleop_twist_joy package to control the robot. Use the Left Trigger and Left Stick to control the robot's linear and angular velocities.
+ros2 launch rosbot joystick.launch.py
+```
 
 ## Useful Commands
 
