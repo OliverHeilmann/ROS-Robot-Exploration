@@ -18,7 +18,7 @@ def generate_launch_description():
 
     map_file_arg = DeclareLaunchArgument(
         "map_file",
-        default_value=os.path.join(get_package_share_directory("rosbot"), "maps", "map2.yaml"),
+        default_value=os.path.join(get_package_share_directory("rosbot"), "maps", "map.yaml"),
         description="Full path to the yaml map file",
     )
 
