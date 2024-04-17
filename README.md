@@ -4,6 +4,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 ## Progress So Far
 
+![RViz Screenshot 6](images/Navigation.png)
 ![RViz Screenshot 5](images/amcl.png)
 ![RViz Screenshot 4](images/2D-Slam.png)
 ![RViz Screenshot 3](images/transforms.png)
@@ -41,6 +42,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
     sudo apt install ros-$ROS_DISTRO-slam-toolbox
     sudo apt install ros-$ROS_DISTRO-navigation2
     sudo apt install ros-$ROS_DISTRO-nav2-bringup
+    sudo apt install ros-$ROS_DISTRO-rqt-graph
 
     # Wayland package for RViz and mapping visualisation tools
     sudo apt install qt6-wayland
@@ -168,6 +170,31 @@ ROSBOT_SIM
 # To launch the AMCL package
 ros2 launch rosbot amcl.launch.py
 ```
+
+## Navigation
+To perform navigation, you can use the `nav2` package. This package provides a set of tools for 2D and 3D navigation. To install the package, run the following command:
+
+```sh
+sudo apt-get install ros-$ROS_DISTRO-navigation2
+```
+
+Launch the navigation stack using the following command:
+```sh
+# To launch the navigation stack
+ros2 launch rosbot navigation.launch.py
+```
+
+More detail (and links to even further detail) can be found on [Husarion Docs](https://husarion.com/tutorials/ros2-tutorials/9-navigation/) but, for my own reference, below are some high level comments on navigation2 principles:
+
+- `amcl` - adaptive Monte Carlo location used for localisation of the robot. It uses a particle filter to estimate the robot's position on a *known* map.
+- `behavior_server` - to configure recovery behavior, for instance when the robot is stuck.
+- `bt_navigator` - allows you to change the behavior of services to create a unique robot behavior (default behavior tree will be used).
+- `controller_server` - reates a local costmap and implements the server for handling the controller requests. Consider how the controller is responsible for taking actions which will move the robot to the goal, but ensuring that the robot avoids obstacles and stays on the intended path. An example is `Regulated Pure Pursuit` which adjusts "steering" based on a look ahead distance to the intended path (some similarities to PID controllers for smoothing robot motion).
+- `local_costmap/global_costmap` - The costmap is created based on the provided map and data from sensors such as cameras and laser scanners that measure whether there are obstacles in the way. Then it creates a special map where each spot has a "cost" value. `local_costmap` is used for local planning and `global_costmap` is used for global planning, where local planning is used to avoid obstacles and global planning is used to find the shortest path to the goal.
+- `Smoother Server` - creates smoother path plans to be more continuous and feasible. This may be useful for robots with non-holonomic constraints e.g. ackermann steering. Consider inflating the costmap to account for the robot's footprint and turning radius.
+- `planner_server` - related to the selection and fine-tuning of the global path,
+- `waypoint_follower` - related to following a multi-point route,
+- `velocity_smoother` - to smooth out the robot's motion.
 
 ## Useful Commands
 
