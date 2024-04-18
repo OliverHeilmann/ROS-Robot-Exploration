@@ -230,6 +230,17 @@ git submodule update --init --recursive --remote
 ```
 
 ```sh
+# clone a repository as a submodule (ensure it is not gitignored)
+git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
+
+# To update the submodules
+git submodule update --init --recursive --remote
+
+ln -s ../modules modules
+
+```
+
+```sh
 # To list all the nodes
 ros2 node list
 ros2 node info [the-node]
