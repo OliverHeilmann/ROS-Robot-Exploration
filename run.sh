@@ -32,10 +32,9 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install socat
     nohup socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\" &
     export CONTAINER=ros_robot_exploration
-    export DISPLAY=host.docker.internal:0
     docker run -dt --rm \
         --name $CONTAINER \
-        --env="DISPLAY=$DISPLAY" \
+        --env="DISPLAY=host.docker.internal:0" \
         --env="QT_X11_NO_MITSHM=1" \
         --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
         -e TEMP_ROS_WS=/ROS-Robot-Exploration \
