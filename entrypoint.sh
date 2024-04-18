@@ -4,7 +4,7 @@
 xhost +local:root
 
 # Check if the workspace directory exists and has the expected structure
-if [ ! -d "$TEMP_ROS_WS/src" ]; then
+if [ ! -d "$TEMP_ROS_WS" ]; then
     echo "Creating ROS workspace directories at ${TEMP_ROS_WS}"
     mkdir -p ${TEMP_ROS_WS}
 fi
