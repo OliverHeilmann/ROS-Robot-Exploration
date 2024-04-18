@@ -46,32 +46,9 @@ jobs:
       #     export ROS_DISTRO=${{ env.ROS_DISTRO }}
       #     ./dependencies.sh
 
-      - name: Set TEMP_ROS_WS environment variable
-        run: |
-          echo "TEMP_ROS_WS=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
-          echo "Workspace directory is $GITHUB_WORKSPACE"
-          echo "TEMP_ROS_WS=${TEMP_ROS_WS}"
-
-          TEMP_ROS_WS=$(dirname "${GITHUB_WORKSPACE}")
-          echo "TEMP_ROS_WS=${TEMP_ROS_WS}" >> $GITHUB_ENV
-          echo "Adjusted Workspace directory is $TEMP_ROS_WS"
-
-          echo "--------------------------------------------------"
-
-          pwd
-
-          echo "--------------------------------------------------"
-
-          ls
-
-          echo "--------------------------------------------------"
-
-          cd ROS-Robot-Exploration
-          ls
-
- 
       - name: Build the Workspace
         run: |
+          export TEMP_ROS_WS=${GITHUB_WORKSPACE}
           echo "Using Workspace directory: $TEMP_ROS_WS"
           chmod +x entrypoint.sh
           ./entrypoint.sh
