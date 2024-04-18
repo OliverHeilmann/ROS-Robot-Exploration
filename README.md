@@ -202,6 +202,13 @@ More detail (and links to even further detail) can be found on [Husarion Docs](h
 ## Joystick Robot Control
 Use a joystick to control the robot. The `joy` package provides a node that interfaces with a joystick and publishes the joystick commands to the `/joy` topic. To use the package, run the following commands:
 
+## Exploration
+To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. To install the package, run the following command (after running Gazebo):
+
+```sh
+ros2 launch rosbot explore.launch.py use_gazebo:=true
+```
+
 ```sh
 # See if you have a connected controller visible by the system
 evtest
