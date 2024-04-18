@@ -16,10 +16,14 @@ if [ -z ${ROS_DISTRO+x} ]; then
     exit 1
 fi
 
-# If ROS-Robot-Exploration dir is present, cd into it
-if [ -d "/ROS-Robot-Exploration" ]; then
+# cd into the ROS-Robot-Exploration directory if not already there
+target_dir="ROS-Robot-Exploration"
+current_dir=$(basename "$(pwd)")
+if [ "$current_dir" = "$target_dir" ]; then
+    echo "Already in the ROS-Robot-Exploration directory."
+elif [ -d "$target_dir" ]; then
     echo "ROS-Robot-Exploration directory found. Changing to it."
-    cd /ROS-Robot-Exploration
+    cd "$target_dir"
 else
     echo "ROS-Robot-Exploration directory not found. Exiting."
     exit 1
