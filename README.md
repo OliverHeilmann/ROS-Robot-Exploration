@@ -12,23 +12,34 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 ![RViz Screenshot 4](images/2D-Slam.png)
 ![RViz Screenshot 3](images/transforms.png)
 ![RViz Screenshot 2](images/KCF-tracking.png)
-<!-- ![RViz Screenshot 1](images/rvis.png) -->
 
-## Requirements
 
-- ROS2: Make sure you have ROS2 installed on your system. You can follow the installation instructions from the official ROS2 documentation: [ROS2 Humble Installation Guide](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+## Getting Started
+Here, we are using Docker to make the setup process easier. The Docker container will have ROS2 installed and the ROSbot simulation running. Additionally, all the GUI tools will be forwarded to the host machine so you can run this project on any machine that supports Docker! There are a few things to setup if you are using a Mac or Windows machine first however (see below).
 
-- Husarion ROSbot: You do **NOT** need a Husarion ROSbot for this project. If you wish to purchase one however, you can find more information from the official Husarion ROSbot website: [Husarion ROSbot](https://husarion.com/tutorials/)
+### Linux
+Nothing to do here! Just ensure you have Docker installed on your machine.
 
-## Getting Started (using Docker Container!)
+### MacOS
+To forward X11 from inside a docker container to a host running macOS
 
+1. Install XQuartz: https://www.xquartz.org/
+2. Launch XQuartz.  Under the XQuartz menu, select Preferences
+3. Go to the security tab and ensure "Allow connections from network clients" is checked.
+4. Restart XQuartz and Docker Desktop (if running). If you experience any issues, restart your computer as well or follow this [Gist](https://gist.github.com/cschiewek/246a244ba23da8b9f0e7b11a68bf3285) guide.
+
+### Windows
+WIP!
+
+### Building and Running the Project
 1. Clone the repository:
 
     ```bash
     git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration --recurse-submodules
+    cd ROS-Robot-Exploration
     ```
 
-2. Build the Docker container using the provided Dockerfile:
+2. Build the Docker container using the provided Dockerfile. *Note: This step will take around 20 minutes to build dependencies and the project*:
 
     ```bash
     chmod +x run.sh
@@ -61,7 +72,8 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 That's it! You should now have a Gazebo simulation running with the ROSbot exploring the environment.
 
-## Networking with ROS2
+## Useful Information and Guides
+### Networking with ROS2
 
 ROS will work over LAN so, if you have two devices on the same network, you will be able to publish and subscribe to the same topics i.e. they are visible to one another. See example below:
 ```sh
@@ -96,7 +108,7 @@ If you want to access ROS2 nodes over the internet, [Husarian](https://husarion.
 
 Some interesting suggestions for security across the ROS2 network are mentioned in this [LinkedIn](https://www.linkedin.com/advice/0/how-can-you-secure-your-ros-system-from-cyber-threats-hgw0c) article. including [rosauth](https://wiki.ros.org/rosauth), [sros](https://docs.ros.org/en/rolling/Tutorials/Advanced/Security/Introducing-ros2-security.html), or [rosbridge_suite](https://github.com/RobotWebTools/rosbridge_suite/blob/ros2/README.md).
 
-## Transformations
+### Transformations
 
 In separate terminals, run the following commands to create static transformations between the map, robot, and camera frames and visualize them in RViz:
 ```sh
@@ -123,7 +135,7 @@ Another example shows how a transformation can occur over time, where the robot 
 ros2 launch rosbot tf_broadcaster.yaml
 ```
 
-## SLAM and AMCL
+### SLAM and AMCL
 To perform SLAM, you can use the `slam_toolbox` package. This package provides a set of tools for 2D and 3D SLAM. To install the package, run the following command:
 
 ```sh
@@ -155,7 +167,7 @@ ROSBOT_SIM
 ros2 launch rosbot amcl.launch.py
 ```
 
-## Navigation
+### Navigation
 To perform navigation, you can use the `nav2` package. This package provides a set of tools for 2D and 3D navigation. To install the package, run the following command:
 
 ```sh
@@ -181,7 +193,7 @@ More detail (and links to even further detail) can be found on [Husarion Docs](h
 - `velocity_smoother` - to smooth out the robot's motion.
 
 
-## Joystick Robot Control
+### Joystick Robot Control
 Use a joystick to control the robot. The `joy` package provides a node that interfaces with a joystick and publishes the joystick commands to the `/joy` topic. To use the package, run the following commands:
 
 ```sh
@@ -201,14 +213,14 @@ ros2 topic echo /joy
 ros2 launch rosbot joystick.launch.py
 ```
 
-## Exploration
+### Exploration
 To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. To install the package, run the following command (after running Gazebo):
 
 ```sh
 ros2 launch rosbot explore.launch.py use_gazebo:=true
 ```
 
-## Useful Commands
+### Useful Commands
 ```sh
 # clone a repository as a submodule (ensure it is not gitignored)
 git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]

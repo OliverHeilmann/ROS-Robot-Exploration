@@ -29,6 +29,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         ros_robot_exploration:latest
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install socat
+    nohup socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\" &
     export CONTAINER=ros_robot_exploration
     export DISPLAY=host.docker.internal:0
     docker run -dt --rm \
