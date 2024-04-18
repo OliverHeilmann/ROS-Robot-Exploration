@@ -20,41 +20,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 - Husarion ROSbot: You do **NOT** need a Husarion ROSbot for this project. If you wish to purchase one however, you can find more information from the official Husarion ROSbot website: [Husarion ROSbot](https://husarion.com/tutorials/)
 
-## Dependencies
-
-- Python: The project uses Python for programming. Make sure you have Python installed on your system. You can download Python from the official Python website: [Python Downloads](https://www.python.org/downloads/)
-
-- C++: The project also uses C++ for programming. Make sure you have a C++ compiler installed on your system. You can install the GNU C++ compiler by running the following command:
-
-    ```bash
-    sudo apt-get install g++
-    ```
-
-- ROS2 Packages: Install the necessary ROS2 packages by running the following command:
-
-    ```bash
-    sudo apt-get install ros-<distro>-<package-name>
-    ```
-
-    Replace `<distro>` with the ROS2 distribution you are using (e.g., foxy, galactic) and `<package-name>` with the name of the required ROS2 package.
-
-- ROS2 dependencies Will think how best to install these for the developer, perhaps a bash script or put into `package.xml` if possible/ where applicable.
-    
-    ```sh
-    sudo apt install ros-$ROS_DISTRO-teleop-twist-keyboard
-    sudo apt install ros-$ROS_DISTRO-slam-toolbox
-    sudo apt install ros-$ROS_DISTRO-navigation2
-    sudo apt install ros-$ROS_DISTRO-nav2-bringup
-    sudo apt install ros-$ROS_DISTRO-rqt-graph
-    sudo apt install ros-$ROS_DISTRO-teleop-twist-joy ros-$ROS_DISTRO-joy  joystick jstest-gtk evtest
-    sudo apt install ros-$ROS_DISTRO-image-geometry
-
-    # Wayland package for RViz and mapping visualisation tools
-    sudo apt install qt6-wayland
-    export QT_QPA_PLATFORM=xcb
-    ```
-
-## Getting Started
+## Getting Started (using Docker Container!)
 
 1. Clone the repository:
 
@@ -62,25 +28,33 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
     git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration
     ```
 
-2. Build the project:
+2. Build the Docker container using the provided Dockerfile:
 
     ```bash
-    cd ROS-Robot-Exploration
-    colcon build
+    sh run.sh
     ```
 
-3. Launch the exploration and detection nodes:
+3. Launch Gazebo:
 
     ```bash
-    source install/setup.bash
-    ros2 launch exploration_detection.launch.py
+    docker exec -it ros_robot_exploration /bin/bash
+    ROSBOT_SIM
     ```
 
-4. Drive the robot around using your keyboard. Run the teleop_twist_keyboard executable as shown below:
+4. Launch the Exploration ROSbot code (new terminal):
+
+    ```bash
+    docker exec -it ros_robot_exploration /bin/bash
+    ros2 launch rosbot explore.launch.py use_gazebo:=true
+    ```
+
+<!-- 4. Drive the robot around using your keyboard. Run the teleop_twist_keyboard executable as shown below:
     
     ```bash
     ros2 run teleop_twist_keyboard teleop_twist_keyboard
-    ```
+    ``` -->
+
+That's it! You should now have a Gazebo simulation running with the ROSbot exploring the environment.
 
 ## Networking with ROS2
 
@@ -205,13 +179,6 @@ More detail (and links to even further detail) can be found on [Husarion Docs](h
 ## Joystick Robot Control
 Use a joystick to control the robot. The `joy` package provides a node that interfaces with a joystick and publishes the joystick commands to the `/joy` topic. To use the package, run the following commands:
 
-## Exploration
-To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. To install the package, run the following command (after running Gazebo):
-
-```sh
-ros2 launch rosbot explore.launch.py use_gazebo:=true
-```
-
 ```sh
 # See if you have a connected controller visible by the system
 evtest
@@ -229,17 +196,20 @@ ros2 topic echo /joy
 ros2 launch rosbot joystick.launch.py
 ```
 
-## Useful Commands
+## Exploration
+To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. To install the package, run the following command (after running Gazebo):
 
+```sh
+ros2 launch rosbot explore.launch.py use_gazebo:=true
+```
+
+## Useful Commands
 ```sh
 # clone a repository as a submodule (ensure it is not gitignored)
 git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
 
 # To update the submodules
 git submodule update --init --recursive --remote
-
-ln -s ../modules modules
-
 ```
 
 ```sh
