@@ -10,23 +10,17 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     rosbot_dir = get_package_share_directory('rosbot')
-    nav2_bringup_launch_file_dir = os.path.join(
-        get_package_share_directory('nav2_bringup'), 'launch', 'bringup_launch.py'
+    nav2_bringup_dir = get_package_share_directory('nav2_bringup')
+    explore_lite_launch = os.path.join(
+        get_package_share_directory('explore_lite'), 'launch', 'explore.launch.py'
     )
 
-    map_yaml_file = LaunchConfiguration('map')
     params_file = LaunchConfiguration('params_file')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
-    declare_map_yaml_cmd = DeclareLaunchArgument(
-        'map',
-        default_value=os.path.join(rosbot_dir, 'maps', 'map.yaml'),
-        description='Full path to map yaml file to load',
-    )
-
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(rosbot_dir, 'config', 'navigation.yaml'),
+        default_value=os.path.join(rosbot_dir, 'config', 'explore.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
 
@@ -34,11 +28,25 @@ def generate_launch_description():
         'use_sim_time', default_value='false', description='Use simulation (Gazebo) clock if true'
     )
 
-    nav2_bringup_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([nav2_bringup_launch_file_dir]),
+    slam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(rosbot_dir, 'launch', 'slam.launch.py')),
         launch_arguments={
-            'map': map_yaml_file,
+            'use_sim_time': use_sim_time,
+            'use_rviz': 'false'
+        }.items(),
+    )
+
+    nav2_bringup_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(nav2_bringup_dir, 'launch', 'navigation_launch.py')),
+        launch_arguments={
+            'use_sim_time': use_sim_time,
             'params_file': params_file,
+        }.items(),
+    )
+
+    explore_lite_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([explore_lite_launch]),
+        launch_arguments={
             'use_sim_time': use_sim_time,
         }.items(),
     )
@@ -46,7 +54,7 @@ def generate_launch_description():
     rviz_config_dir = os.path.join(
         rosbot_dir,
         'rviz',
-        'navigation.rviz',
+        'explore.rviz',
     )
 
     rviz_node = Node(
@@ -60,11 +68,12 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_use_sim_time_cmd)
 
+    ld.add_action(slam_launch)
     ld.add_action(nav2_bringup_launch)
+    ld.add_action(explore_lite_launch)
     ld.add_action(rviz_node)
 
     return ld

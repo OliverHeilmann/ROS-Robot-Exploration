@@ -44,6 +44,7 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
     sudo apt install ros-$ROS_DISTRO-nav2-bringup
     sudo apt install ros-$ROS_DISTRO-rqt-graph
     sudo apt install ros-$ROS_DISTRO-teleop-twist-joy ros-$ROS_DISTRO-joy  joystick jstest-gtk evtest
+    sudo apt install ros-$ROS_DISTRO-image-geometry
 
     # Wayland package for RViz and mapping visualisation tools
     sudo apt install qt6-wayland
@@ -226,6 +227,9 @@ git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
 
 # To update the submodules
 git submodule update --init --recursive --remote
+
+ln -s ../modules modules
+
 ```
 
 ```sh
@@ -252,6 +256,9 @@ ros2 run plotjuggler plotjuggler
 
 # To build a specific package
 colcon build --packages-select [the-package]
+
+# To source the ROS workspace after building new packages
+source ~/ROS-Robot-Exploration/install/setup.bash
 
 # Install a ROS package
 sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
