@@ -1,5 +1,7 @@
 # ignore submodules content
 modules/*
+!modules/explore_lite
+!modules/rosbot_xl_ros
 
 # general
 build
