@@ -1,3 +1,6 @@
 [submodule "modules/rosbot_xl_ros"]
 	path = modules/rosbot_xl_ros
 	url = https://github.com/husarion/rosbot_xl_ros.git
+[submodule "modules/explore_lite"]
+	path = modules/explore_lite
+	url = https://github.com/robo-friends/m-explore-ros2.git

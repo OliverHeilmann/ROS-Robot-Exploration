@@ -4,6 +4,9 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
 ## Progress So Far
 
+![RViz Screenshot 6](images/Explore1.png)
+![RViz Screenshot 6](images/Explore2.png)
+![RViz Screenshot 6](images/Explore3.png)
 ![RViz Screenshot 6](images/Navigation.png)
 ![RViz Screenshot 5](images/amcl.png)
 ![RViz Screenshot 4](images/2D-Slam.png)
@@ -43,6 +46,8 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
     sudo apt install ros-$ROS_DISTRO-navigation2
     sudo apt install ros-$ROS_DISTRO-nav2-bringup
     sudo apt install ros-$ROS_DISTRO-rqt-graph
+    sudo apt install ros-$ROS_DISTRO-teleop-twist-joy ros-$ROS_DISTRO-joy  joystick jstest-gtk evtest
+    sudo apt install ros-$ROS_DISTRO-image-geometry
 
     # Wayland package for RViz and mapping visualisation tools
     sudo apt install qt6-wayland
@@ -196,7 +201,46 @@ More detail (and links to even further detail) can be found on [Husarion Docs](h
 - `waypoint_follower` - related to following a multi-point route,
 - `velocity_smoother` - to smooth out the robot's motion.
 
+
+## Joystick Robot Control
+Use a joystick to control the robot. The `joy` package provides a node that interfaces with a joystick and publishes the joystick commands to the `/joy` topic. To use the package, run the following commands:
+
+## Exploration
+To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. To install the package, run the following command (after running Gazebo):
+
+```sh
+ros2 launch rosbot explore.launch.py use_gazebo:=true
+```
+
+```sh
+# See if you have a connected controller visible by the system
+evtest
+
+# See which controllers are connected, and which ID you want to use
+ros2 run joy joy_enumerate_devices
+
+# Run the joy node to publish joystick commands to the /joy topic
+ros2 run joy joy_node
+
+# To see the joystick commands, run the following command
+ros2 topic echo /joy
+
+# When you have the joystick commands, you can use the teleop_twist_joy package to control the robot. Use the Left Trigger and Left Stick to control the robot's linear and angular velocities.
+ros2 launch rosbot joystick.launch.py
+```
+
 ## Useful Commands
+
+```sh
+# clone a repository as a submodule (ensure it is not gitignored)
+git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
+
+# To update the submodules
+git submodule update --init --recursive --remote
+
+ln -s ../modules modules
+
+```
 
 ```sh
 # To list all the nodes
@@ -222,6 +266,9 @@ ros2 run plotjuggler plotjuggler
 
 # To build a specific package
 colcon build --packages-select [the-package]
+
+# To source the ROS workspace after building new packages
+source ~/ROS-Robot-Exploration/install/setup.bash
 
 # Install a ROS package
 sudo apt-get install ros-$ROS_DISTRO-[the-package-name]
