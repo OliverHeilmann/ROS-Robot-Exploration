@@ -34,31 +34,48 @@ jobs:
           source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
         shell: bash
 
-      - name: Install system dependencies with dependencies.sh shell script
-        run: |
-          sudo apt-get update
-          sudo apt install -y qt6-wayland
-          echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
-          source ~/.bashrc
-          sudo add-apt-repository universe
+      # - name: Install system dependencies with dependencies.sh shell script
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt install -y qt6-wayland
+      #     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
+      #     source ~/.bashrc
+      #     sudo add-apt-repository universe
 
-          chmod +x dependencies.sh
-          export ROS_DISTRO=${{ env.ROS_DISTRO }}
-          ./dependencies.sh
+      #     chmod +x dependencies.sh
+      #     export ROS_DISTRO=${{ env.ROS_DISTRO }}
+      #     ./dependencies.sh
 
       - name: Set TEMP_ROS_WS environment variable
         run: |
+          echo "TEMP_ROS_WS=${GITHUB_WORKSPACE}" >> $GITHUB_ENV
+          echo "Workspace directory is $GITHUB_WORKSPACE"
+          echo "TEMP_ROS_WS=${TEMP_ROS_WS}"
+
           TEMP_ROS_WS=$(dirname "${GITHUB_WORKSPACE}")
           echo "TEMP_ROS_WS=${TEMP_ROS_WS}" >> $GITHUB_ENV
           echo "Adjusted Workspace directory is $TEMP_ROS_WS"
 
+          echo "--------------------------------------------------"
+
+          pwd
+
+          echo "--------------------------------------------------"
+
+          ls
+
+          echo "--------------------------------------------------"
+
+          cd ROS-Robot-Exploration
+          ls
+
+ 
       - name: Build the Workspace
         run: |
           echo "Using Workspace directory: $TEMP_ROS_WS"
           chmod +x entrypoint.sh
           ./entrypoint.sh
         shell: bash
-
       - name: List output files
         run: |
           echo "Listing build output..."
