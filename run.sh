@@ -12,20 +12,40 @@
 docker build -t ros_robot_exploration -f Dockerfile.ROS2 .
 
 # Allow permissions to X11 for showing GUI through docker
-xhost +local:docker
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    xhost +local:root
+    export CONTAINER=ros_robot_exploration
+    docker run -dt --rm  \
+        --name $CONTAINER \
+        --env="DISPLAY" \
+        --env="QT_X11_NO_MITSHM=1" \
+        --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+        --device /dev/dri:/dev/dri \
+        -e TEMP_ROS_WS=/ROS-Robot-Exploration \
+        -v $(pwd):/ROS-Robot-Exploration \
+        -v $(pwd)/entrypoint.sh:/usr/local/bin/entrypoint.sh \
+        ros_robot_exploration:latest
 
-# Run the docker container
-export CONTAINER=ros_robot_exploration
-docker run -dt --rm  \
-    --name $CONTAINER \
-    --env="DISPLAY" \
-    --env="QT_X11_NO_MITSHM=1" \
-    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
-    --device /dev/dri:/dev/dri \
-    -e TEMP_ROS_WS=/ROS-Robot-Exploration \
-    -v $(pwd):/ROS-Robot-Exploration \
-    -v $(pwd)/entrypoint.sh:/usr/local/bin/entrypoint.sh \
-    ros_robot_exploration:latest
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    export CONTAINER=ros_robot_exploration
+    export DISPLAY=host.docker.internal:0.0
+    docker run -e --rm \
+        --name $CONTAINER \
+        --env="DISPLAY=$DISPLAY" \
+        --env="QT_X11_NO_MITSHM=1" \
+        --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+        -e TEMP_ROS_WS=/ROS-Robot-Exploration \
+        -v $(pwd):/ROS-Robot-Exploration \
+        -v $(pwd)/entrypoint.sh:/usr/local/bin/entrypoint.sh \
+        ros_robot_exploration:latest \
+        xeyes
+
+elif [[ "$OSTYPE" == "msys" ]]; then
+    echo "Windows not yet supported, use Mac or Linux instead!"
+    exit 1
+else
+    echo "OS not supported"
+fi
 
 # Run two programs, each a separate docker terminal using the command below
 docker exec -it $CONTAINER /bin/bash
