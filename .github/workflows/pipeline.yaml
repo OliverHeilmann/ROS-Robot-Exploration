@@ -34,17 +34,17 @@ jobs:
           source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
         shell: bash
 
-      # - name: Install system dependencies with dependencies.sh shell script
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt install -y qt6-wayland
-      #     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
-      #     source ~/.bashrc
-      #     sudo add-apt-repository universe
+      - name: Install system dependencies with dependencies.sh shell script
+        run: |
+          sudo apt-get update
+          sudo apt install -y qt6-wayland
+          echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
+          source ~/.bashrc
+          sudo add-apt-repository universe
 
-      #     chmod +x dependencies.sh
-      #     export ROS_DISTRO=${{ env.ROS_DISTRO }}
-      #     ./dependencies.sh
+          chmod +x dependencies.sh
+          export ROS_DISTRO=${{ env.ROS_DISTRO }}
+          ./dependencies.sh
 
       - name: Build the Workspace
         run: |

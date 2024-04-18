@@ -60,16 +60,6 @@ if ! grep -q "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.p
     echo "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.py'" >> ~/.bashrc
 fi
 
-echo "---------------------------------"
-
-ls -l
-
-echo "---------------------------------"
-
-pwd
-
-echo "---------------------------------"
-
 # Update the workspace/ environment with the new packages
 source ${TEMP_ROS_WS}/install/setup.bash
 

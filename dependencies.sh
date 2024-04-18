@@ -15,6 +15,7 @@ sudo apt-get install -y \
     libopencv-dev \
     ros-$ROS_DISTRO-ament-cmake \
     ros-$ROS_DISTRO-desktop \
+    ros-$ROS_DISTRO-cv-bridge \
     ros-$ROS_DISTRO-teleop-twist-keyboard \
     ros-$ROS_DISTRO-slam-toolbox \
     ros-$ROS_DISTRO-navigation2 \
