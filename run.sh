@@ -30,7 +30,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export CONTAINER=ros_robot_exploration
-    export DISPLAY=host.docker.internal:0.0
+    export DISPLAY=host.docker.internal:0
     docker run -dt --rm \
         --name $CONTAINER \
         --env="DISPLAY=$DISPLAY" \
