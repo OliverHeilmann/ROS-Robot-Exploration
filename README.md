@@ -25,19 +25,22 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration
+    git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration --recurse-submodules
     ```
 
 2. Build the Docker container using the provided Dockerfile:
 
     ```bash
-    sh run.sh
+    chmod +x run.sh
+    ./run.sh
     ```
 
 3. Launch Gazebo:
 
     ```bash
     docker exec -it ros_robot_exploration /bin/bash
+
+    # Then inside the container
     ROSBOT_SIM
     ```
 
@@ -45,6 +48,8 @@ This project aims to build a robotic system using ROS2 and Husarion ROSbot for a
 
     ```bash
     docker exec -it ros_robot_exploration /bin/bash
+
+    # Then inside the container
     ros2 launch rosbot explore.launch.py use_gazebo:=true
     ```
 

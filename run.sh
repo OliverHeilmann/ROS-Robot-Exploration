@@ -1,3 +1,5 @@
+# /bin/bash
+
 # If you want to use a docker container to do all tests/ dev work, use this script to set up the container and run the simulation.
 # I suggest that you use VS Code's docker extension to run things in the container however due to the GUI benefits!
 
@@ -29,7 +31,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export CONTAINER=ros_robot_exploration
     export DISPLAY=host.docker.internal:0.0
-    docker run -e --rm \
+    docker run -dt --rm \
         --name $CONTAINER \
         --env="DISPLAY=$DISPLAY" \
         --env="QT_X11_NO_MITSHM=1" \
@@ -37,8 +39,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
         -e TEMP_ROS_WS=/ROS-Robot-Exploration \
         -v $(pwd):/ROS-Robot-Exploration \
         -v $(pwd)/entrypoint.sh:/usr/local/bin/entrypoint.sh \
-        ros_robot_exploration:latest \
-        xeyes
+        ros_robot_exploration:latest
 
 elif [[ "$OSTYPE" == "msys" ]]; then
     echo "Windows not yet supported, use Mac or Linux instead!"
@@ -47,8 +48,13 @@ else
     echo "OS not supported"
 fi
 
+# Attach to the container to check on install progress
+docker attach $CONTAINER
+
 # Run two programs, each a separate docker terminal using the command below
-docker exec -it $CONTAINER /bin/bash
+#   docker exec -it $CONTAINER /bin/bash
+
+# Alternatively, you can open the container with Visual Studio Code's Docker extension (recommended)
 
 # Terminal 1: 
 #   ROSBOT_SIM
