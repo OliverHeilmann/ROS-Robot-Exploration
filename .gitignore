@@ -8,6 +8,7 @@ build
 install
 log
 tmp
+nohup*
 
 # Topic things
 src/**/saved_images/*

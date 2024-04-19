@@ -1,0 +1,64 @@
+# Create a Docker Image with ROS2 and all necessary packages for the ROS_Robot_Exploration project
+# 
+# Create the image as follows:
+#   docker build -t ros_robot_exploration -f Dockerfile.ROS2 .
+#
+# Create the container as follows (from ROS-Robot-Exploration directory):
+#   export CONTAINER=ros_robot_exploration
+#   docker run -dt --rm  \
+#       --name $CONTAINER \
+#       --env="DISPLAY" \
+#       --env="QT_X11_NO_MITSHM=1" \
+#       --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+#       --device /dev/dri:/dev/dri \
+#       -e TEMP_ROS_WS=/ROS-Robot-Exploration \
+#       -v $(pwd):/ROS-Robot-Exploration \
+#       -v $(pwd)/entrypoint.sh:/usr/local/bin/entrypoint.sh \
+#       ros_robot_exploration:latest
+
+# Use the official ROS base image
+FROM ros:humble
+
+# Determine hardware architecture
+RUN ARCH=$(uname -m) && \
+    echo "[INFO]: Detected Architecture: ${ARCH}"
+
+# Set the ROS and Gazebo distribution environment variables
+ENV ROS_DISTRO=humble \
+    GZ_DISTRO=harmonic \
+    QT_QPA_PLATFORM=xcb \
+    PATH="/usr/local/bin:${PATH}" \
+    TEMP_ROS_WS=/opt/temp_ros_ws
+
+# Copy the install script into the container
+COPY dependencies.sh /usr/local/bin/dependencies.sh
+
+# Ensure the script is executable
+RUN chmod +x /usr/local/bin/dependencies.sh
+
+# Run the install script
+RUN /usr/local/bin/dependencies.sh
+
+# Install Gazebo distribution
+RUN sudo apt-get update && \
+    sudo apt-get install lsb-release wget gnupg -y && \
+    sudo wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg    && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null && \
+    sudo apt-get update && \
+    sudo apt-get install gz-$GZ_DISTRO -y
+
+# Source ROS setup script
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+
+# Create the workspace directory
+RUN mkdir -p ${TEMP_ROS_WS}
+
+# You might want to ensure a default script is there as a fallback
+COPY entrypoint.sh /usr/local/bin/entrypoint_default.sh
+RUN chmod +x /usr/local/bin/entrypoint_default.sh
+
+# Set the entry point to the custom script
+# It's good to explicitly call the shell to avoid executable issues
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
+
+CMD ["bash"]
