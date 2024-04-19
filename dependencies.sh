@@ -38,7 +38,6 @@ retry 3 sudo apt-get install -y \
     python3-vcstool \
     python3-rosdep \
     python3-ament-package \
-    python3-ament-cmake \
     libopencv-dev \
     ros-$ROS_DISTRO-ament-cmake \
     ros-$ROS_DISTRO-desktop \
