@@ -65,6 +65,7 @@ jobs:
 
       - name: Build the Workspace
         run: |
+          export AMENT_PREFIX_PATH=/opt/ros/$ROS_DISTRO:$AMENT_PREFIX_PATH
           export CMAKE_PREFIX_PATH=/opt/ros/$ROS_DISTRO:$CMAKE_PREFIX_PATH
           export TEMP_ROS_WS=${GITHUB_WORKSPACE}
           echo "Using Workspace directory: $TEMP_ROS_WS"
