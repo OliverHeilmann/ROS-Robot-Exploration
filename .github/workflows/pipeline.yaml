@@ -22,37 +22,49 @@ jobs:
       
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
-      - name: Set up ROS2 environment
+      - name: Build Docker Container with Configurations
         run: |
-          sudo apt update && sudo apt install software-properties-common lsb-release -y
-          sudo add-apt-repository universe
-          sudo apt update && sudo apt install curl -y
-          sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-          sudo apt update
-          sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake
-          source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
+          chmod +x run.sh
+          ./run.sh
         shell: bash
 
-      - name: Install system dependencies with dependencies.sh shell script
+      - name: Echo from inside the container
         run: |
-          sudo apt-get update
-          sudo apt install -y qt6-wayland
-          echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
-          source ~/.bashrc
-          sudo add-apt-repository universe
-
-          chmod +x dependencies.sh
-          export ROS_DISTRO=${{ env.ROS_DISTRO }}
-          ./dependencies.sh
-
-      - name: Build the Workspace
-        run: |
-          export TEMP_ROS_WS=${GITHUB_WORKSPACE}
-          echo "Using Workspace directory: $TEMP_ROS_WS"
-          chmod +x entrypoint.sh
-          ./entrypoint.sh
+          docker exec -it ros_robot_exploration echo "Running inside the container..."
         shell: bash
+
+      # - name: Set up ROS2 environment
+      #   run: |
+      #     sudo apt update && sudo apt install software-properties-common lsb-release -y
+      #     sudo add-apt-repository universe
+      #     sudo apt update && sudo apt install curl -y
+      #     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+      #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+      #     sudo apt update
+      #     sudo apt install -y ros-${{ env.ROS_DISTRO }}-ros-base ros-${{ env.ROS_DISTRO }}-ament-cmake
+      #     source /opt/ros/${{ env.ROS_DISTRO }}/setup.bash
+      #   shell: bash
+
+      # - name: Install system dependencies with dependencies.sh shell script
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt install -y qt6-wayland
+      #     echo "export QT_QPA_PLATFORM=xcb" >> ~/.bashrc
+      #     source ~/.bashrc
+      #     sudo add-apt-repository universe
+
+      #     chmod +x dependencies.sh
+      #     export ROS_DISTRO=${{ env.ROS_DISTRO }}
+      #     ./dependencies.sh
+
+      # - name: Build the Workspace
+      #   run: |
+      #     export TEMP_ROS_WS=${GITHUB_WORKSPACE}
+      #     echo "Using Workspace directory: $TEMP_ROS_WS"
+      #     chmod +x entrypoint.sh
+      #     ./entrypoint.sh
+      #   shell: bash
+
       - name: List output files
         run: |
           echo "Listing build output..."
