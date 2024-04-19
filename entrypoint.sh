@@ -37,7 +37,7 @@ vcs import modules < modules/rosbot_xl_ros/rosbot_xl/rosbot_xl_hardware.repos
 vcs import modules < modules/rosbot_xl_ros/rosbot_xl/rosbot_xl_simulation.repos
 sudo rosdep init
 rosdep update --rosdistro $ROS_DISTRO
-rosdep install -i --from-path modules --rosdistro $ROS_DISTRO -y || exit 1
+rosdep install --from-paths . --ignore-src -r -y --rosdistro $ROS_DISTRO || exit 1
 
 # # Install ROS packages with rosdep from ROS-Robot-Exploration dir
 rosdep install --from-paths src --ignore-src -r -y --rosdistro $ROS_DISTRO
@@ -59,10 +59,6 @@ if ! grep -q "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.p
     echo "Adding alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.py' to ~/.bashrc"
     echo "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.py'" >> ~/.bashrc
 fi
-
-# Get the ROS workspace dependencies
-sudo apt-get update
-rosdep install --from-paths src --ignore-src -r -y --rosdistro $ROS_DISTRO
 
 # Update the workspace/ environment with the new packages
 source ${TEMP_ROS_WS}/install/setup.bash
