@@ -60,6 +60,10 @@ if ! grep -q "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.p
     echo "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.py'" >> ~/.bashrc
 fi
 
+# Get the ROS workspace dependencies
+sudo apt-get update
+rosdep install --from-paths src --ignore-src -r -y --rosdistro $ROS_DISTRO
+
 # Update the workspace/ environment with the new packages
 source ${TEMP_ROS_WS}/install/setup.bash
 
