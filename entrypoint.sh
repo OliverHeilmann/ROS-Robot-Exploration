@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Allow local X11 server to be accessed
-xhost +local:root
+xhost +local:root || echo "xhost not found. Continuing without it."
 
 # Check if the workspace directory exists and has the expected structure
 if [ ! -d "$TEMP_ROS_WS" ]; then

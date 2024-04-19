@@ -16,21 +16,19 @@
 #       -v $(pwd)/entrypoint.sh:/usr/local/bin/entrypoint.sh \
 #       ros_robot_exploration:latest
 
-# Use the official Ubuntu base image with the tag 22.04
-FROM ubuntu:22.04
+# Use the official ROS base image
+FROM ros:humble
 
 # Determine hardware architecture
 RUN ARCH=$(uname -m) && \
     echo "[INFO]: Detected Architecture: ${ARCH}"
 
-# Use the official ROS base image
-FROM ros:humble
-
-# Set the ROS_DISTRO environment variable
-ENV ROS_DISTRO=humble
-
-# Set the GZ_DISTRO environment variable
-ENV GZ_DISTRO=harmonic
+# Set the ROS and Gazebo distribution environment variables
+ENV ROS_DISTRO=humble \
+    GZ_DISTRO=harmonic \
+    QT_QPA_PLATFORM=xcb \
+    PATH="/usr/local/bin:${PATH}" \
+    TEMP_ROS_WS=/opt/temp_ros_ws
 
 # Copy the install script into the container
 COPY dependencies.sh /usr/local/bin/dependencies.sh
@@ -49,20 +47,11 @@ RUN sudo apt-get update && \
     sudo apt-get update && \
     sudo apt-get install gz-$GZ_DISTRO -y
 
-# Environment setup (or "offscreen" for headless environments)
-ENV QT_QPA_PLATFORM=xcb
-
 # Source ROS setup script
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
-# Set the environment variable for the workspace directory (can be changed when creating container)
-ENV TEMP_ROS_WS /opt/temp_ros_ws 
-
 # Create the workspace directory
 RUN mkdir -p ${TEMP_ROS_WS}
-
-# Ensure that /usr/local/bin is in the PATH if not already
-ENV PATH="/usr/local/bin:${PATH}"
 
 # You might want to ensure a default script is there as a fallback
 COPY entrypoint.sh /usr/local/bin/entrypoint_default.sh
