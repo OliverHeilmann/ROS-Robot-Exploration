@@ -49,6 +49,7 @@ retry 3 sudo apt-get install -y \
     ros-$ROS_DISTRO-rqt-graph \
     ros-$ROS_DISTRO-teleop-twist-joy \
     ros-$ROS_DISTRO-joy \
+    ros-$ROS_DISTRO-clearpath-simulator \
     joystick \
     jstest-gtk \
     evtest \
