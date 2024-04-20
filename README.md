@@ -221,29 +221,13 @@ ros2 launch rosbot explore.launch.py use_gazebo:=true
 ```
 
 ### Clearpath Robotics
-To use the Clearpath Robotics simulation environment within this workspace, you will have to make a couple minor changes to some launchfile paths inside the `modules/clearpath/clearpath_gz/launch/robot_spawn.launch.py` and `modules/clearpath/clearpath_gz/launch/simulation.launch.py` directories.
+To use the Clearpath Robotics simulation environment within this workspace, you will have to  add a `robot.yaml` file to the `modules/clearpath/` directory, which can be found in the [Clearpath Documentation](https://docs.clearpathrobotics.com/docs/ros/config/yaml/overview#sample) for example.
+
+Now launch the simulation using the following command:
 
 ```sh
-ARGUMENTS = [
-    DeclareLaunchArgument('rviz', default_value='false',
-                          choices=['true', 'false'], description='Start rviz.'),
-    DeclareLaunchArgument('world', default_value='warehouse',
-                          description='Gazebo World'),
-    DeclareLaunchArgument('setup_path',
-                          default_value=[EnvironmentVariable('PWD'), '/modules/clearpath/'],    # change to this line (should be at top of files)!
-                          description='Clearpath setup path'),
-    DeclareLaunchArgument('use_sim_time', default_value='true',
-                          choices=['true', 'false'],
-                          description='use_sim_time'),
-]
-```
-
-Also, add a `robot.yaml` file to the `modules/clearpath/` directory, which can be found in the [Clearpath Documentation](https://docs.clearpathrobotics.com/docs/ros/config/yaml/overview#sample) for example.
-
-Finally, launch the simulation using the following command:
-
-```sh
-ros2 launch clearpath_gz simulation.launch.py
+# Make sure to add the path to your clearpath directory - this repo has it in the following location
+ros2 launch clearpath_gz simulation.launch.py setup_path:=$HOME/ROS-Robot-Exploration/modules/clearpath/
 ```
 
 
