@@ -1,9 +1,10 @@
 # ROS-Robot-Exploration
 
-This project aims to build a robotic system using ROS2 and Husarion ROSbot for autonomous exploration and key item detection in an area.
+This project aims to build robotic systems using ROS2 and physics simulators such as Gazebo. So far, the Husarion ROSbot has been used for autonomous exploration and mapping. Next, a similar system build is achieved with a Clearpath Robotics robot (`a200_0000`). The project is still in progress and will be updated as new features are added.
 
 ## Progress So Far
 
+![Clearpath 1](images/Clearpath1.png)
 ![RViz Screenshot 6](images/Explore1.png)
 ![RViz Screenshot 6](images/Explore2.png)
 ![RViz Screenshot 6](images/Explore3.png)
@@ -220,15 +221,21 @@ To perform exploration, you can use the `explore_lite` package. This package pro
 ros2 launch rosbot explore.launch.py use_gazebo:=true
 ```
 
-### Useful Commands
-```sh
-# clone a repository as a submodule (ensure it is not gitignored)
-git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
+### Clearpath Robotics
+To use the Clearpath Robotics simulation environment within this workspace, you will have to  add a `robot.yaml` file to the `modules/clearpath/` directory, which can be found in the [Clearpath Documentation](https://docs.clearpathrobotics.com/docs/ros/config/yaml/overview#sample) for example.
 
-# To update the submodules
-git submodule update --init --recursive --remote
+Now launch the simulation using the following command:
+
+```sh
+# Make sure to add the path to your clearpath directory - this repo has it in the following location
+ros2 launch clearpath_gz simulation.launch.py setup_path:=$HOME/ROS-Robot-Exploration/modules/clearpath/
+
+# Change the world to your desired world
+ros2 launch clearpath_gz simulation.launch.py world:=my_world
 ```
 
+
+### Useful Commands
 ```sh
 # clone a repository as a submodule (ensure it is not gitignored)
 git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]

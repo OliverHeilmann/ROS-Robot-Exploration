@@ -2,6 +2,7 @@
 modules/*
 !modules/explore_lite
 !modules/rosbot_xl_ros
+!modules/clearpath
 
 # general
 build
@@ -9,6 +10,7 @@ install
 log
 tmp
 nohup*
+.dep
 
 # Topic things
 src/**/saved_images/*

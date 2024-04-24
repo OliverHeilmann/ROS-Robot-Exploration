@@ -37,9 +37,11 @@ vcs import modules < modules/rosbot_xl_ros/rosbot_xl/rosbot_xl_hardware.repos
 vcs import modules < modules/rosbot_xl_ros/rosbot_xl/rosbot_xl_simulation.repos
 sudo rosdep init
 rosdep update --rosdistro $ROS_DISTRO
-rosdep install --from-paths . --ignore-src -r -y --rosdistro $ROS_DISTRO || exit 1
 
-# # Install ROS packages with rosdep from ROS-Robot-Exploration dir
+# Install ROS packages with rosdep for imported ROS-Robot-Exploration src modules
+rosdep install --from-paths modules --ignore-src -r -y --rosdistro $ROS_DISTRO || exit 1
+
+# Install ROS packages with rosdep for custom ROS-Robot-Exploration src modules
 rosdep install --from-paths src --ignore-src -r -y --rosdistro $ROS_DISTRO
 
 # Source ROS setup, put in .bashrc if not already there
