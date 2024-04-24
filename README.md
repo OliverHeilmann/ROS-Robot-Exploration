@@ -228,18 +228,13 @@ Now launch the simulation using the following command:
 ```sh
 # Make sure to add the path to your clearpath directory - this repo has it in the following location
 ros2 launch clearpath_gz simulation.launch.py setup_path:=$HOME/ROS-Robot-Exploration/modules/clearpath/
+
+# Change the world to your desired world
+ros2 launch clearpath_gz simulation.launch.py world:=my_world
 ```
 
 
 ### Useful Commands
-```sh
-# clone a repository as a submodule (ensure it is not gitignored)
-git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
-
-# To update the submodules
-git submodule update --init --recursive --remote
-```
-
 ```sh
 # clone a repository as a submodule (ensure it is not gitignored)
 git submodule add [the-repository-to-clone]  [the-directory-to-clone-into]
