@@ -1,9 +1,10 @@
 # ROS-Robot-Exploration
 
-This project aims to build a robotic system using ROS2 and Husarion ROSbot for autonomous exploration and key item detection in an area.
+This project aims to build robotic systems using ROS2 and physics simulators such as Gazebo. So far, the Husarion ROSbot has been used for autonomous exploration and mapping. Next, a similar system build is achieved with a Clearpath Robotics robot (`a200_0000`). The project is still in progress and will be updated as new features are added.
 
 ## Progress So Far
 
+![Clearpath 1](images/Clearpath1.png)
 ![RViz Screenshot 6](images/Explore1.png)
 ![RViz Screenshot 6](images/Explore2.png)
 ![RViz Screenshot 6](images/Explore3.png)

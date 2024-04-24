@@ -10,6 +10,7 @@ install
 log
 tmp
 nohup*
+.dep
 
 # Topic things
 src/**/saved_images/*
