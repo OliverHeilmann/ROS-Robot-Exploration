@@ -4,3 +4,6 @@
 [submodule "modules/explore_lite"]
 	path = modules/explore_lite
 	url = https://github.com/robo-friends/m-explore-ros2.git
+[submodule "modules/clearpath"]
+	path = modules/clearpath
+	url = https://github.com/clearpathrobotics/clearpath_simulator.git
