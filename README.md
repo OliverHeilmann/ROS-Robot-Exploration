@@ -47,7 +47,7 @@ Once you have ROS2 installed, you can clone this repository and build the projec
     ```
 
 
-### Using Docker
+### Using Docker (experimental)
 Here, we are using Docker to make the setup process easier. The Docker container will have ROS2 installed and the ROSbot simulation running. Additionally, all the GUI tools will be forwarded to the host machine so you can run this project on any machine that supports Docker! There are a few things to setup if you are using a Mac or Windows machine first however (see below).
 
 ### Linux
