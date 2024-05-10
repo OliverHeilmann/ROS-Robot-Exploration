@@ -7,3 +7,15 @@
 [submodule "modules/clearpath"]
 	path = modules/clearpath
 	url = https://github.com/clearpathrobotics/clearpath_simulator.git
+[submodule "modules/clearpath/clearpath_common"]
+	path = modules/clearpath/clearpath_common
+	url = https://github.com/clearpathrobotics/clearpath_common.git
+	branch = humble
+[submodule "modules/clearpath/clearpath_config"]
+	path = modules/clearpath/clearpath_config
+	url = https://github.com/clearpathrobotics/clearpath_config.git
+	branch = main
+[submodule "modules/clearpath/clearpath_msgs"]
+	path = modules/clearpath/clearpath_msgs
+	url = https://github.com/clearpathrobotics/clearpath_msgs.git
+	branch = main

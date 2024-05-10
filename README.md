@@ -2,7 +2,7 @@
 
 This project aims to build robotic systems using ROS2 and physics simulators such as Gazebo. So far, the Husarion ROSbot has been used for autonomous exploration and mapping. Next, a similar system build is achieved with a Clearpath Robotics robot (`a200_0000`). The project is still in progress and will be updated as new features are added.
 
-## Progress So Far
+## Progress So Far...
 
 ![Clearpath 1](images/Clearpath1.png)
 ![RViz Screenshot 6](images/Explore1.png)
@@ -14,8 +14,40 @@ This project aims to build robotic systems using ROS2 and physics simulators suc
 ![RViz Screenshot 3](images/transforms.png)
 ![RViz Screenshot 2](images/KCF-tracking.png)
 
-
 ## Getting Started
+### Using Host Machine
+To run this project on your host machine, you will need to have ROS2 humble installed on a Ubuntu 22.04 system. If you do not have ROS2 installed, you can follow the instructions on the [ROS2 humble website](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html).
+
+Once you have ROS2 installed, you can clone this repository and build the project using the following commands:
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration --recurse-submodules
+    cd ROS-Robot-Exploration
+    ```
+
+2. Install the necessary dependencies and build the project:
+
+    ```bash
+    chmod +x entrypoint.sh
+    ./entrypoint.sh
+    ```
+
+3. Launch Gazebo:
+
+    ```bash
+    ROSBOT_SIM
+    ```
+
+4. Launch the Exploration ROSbot code (new terminal):
+
+    ```bash
+    ros2 launch rosbot explore.launch.py use_gazebo:=true
+    ```
+
+
+### Using Docker (experimental)
 Here, we are using Docker to make the setup process easier. The Docker container will have ROS2 installed and the ROSbot simulation running. Additionally, all the GUI tools will be forwarded to the host machine so you can run this project on any machine that supports Docker! There are a few things to setup if you are using a Mac or Windows machine first however (see below).
 
 ### Linux
@@ -30,7 +62,7 @@ To forward X11 from inside a docker container to a host running macOS
 4. Restart XQuartz and Docker Desktop (if running). If you experience any issues, restart your computer as well or follow this [Gist](https://gist.github.com/cschiewek/246a244ba23da8b9f0e7b11a68bf3285) guide.
 
 ### Windows
-WIP!
+WIP! Need to check if X11 forwarding works on Windows. If not, will need to use VcXsrv or similar.
 
 ### Building and Running the Project
 1. Clone the repository:
@@ -47,13 +79,16 @@ WIP!
     ./run.sh
     ```
 
-3. Launch Gazebo (note: some issues with launching GUI through docker - will fix!):
+3. Launch Gazebo in a new terminal (Note: works on Ubuntu 22.04, some isses with X11 forwarding Ubuntu 20.04):
 
     ```bash
     docker exec -it ros_robot_exploration /bin/bash
 
     # Then inside the container
     ROSBOT_SIM
+
+    # Alternatively, launch headless (may work on Ubuntu 20.04 depending on your setup)
+    ros2 launch rosbot_xl_gazebo simulation.launch.py headless:=True
     ```
 
 4. Launch the Exploration ROSbot code (new terminal):
@@ -72,6 +107,12 @@ WIP!
     ``` -->
 
 That's it! You should now have a Gazebo simulation running with the ROSbot exploring the environment.
+
+*Note: If you are experiencing issues stopping the docker container, try using the command below (taken from [Stack Overflow issue](https://stackoverflow.com/questions/47223280/docker-containers-can-not-be-stopped-or-removed-permission-denied-error)):*
+
+```bash
+ sudo aa-remove-unknown
+```
 
 ## Useful Information and Guides
 ### Networking with ROS2
@@ -234,7 +275,7 @@ ros2 launch clearpath_gz simulation.launch.py setup_path:=$HOME/ROS-Robot-Explor
 ros2 launch clearpath_gz simulation.launch.py world:=my_world
 ```
 
-
+<!--
 ### Useful Commands
 ```sh
 # clone a repository as a submodule (ensure it is not gitignored)
@@ -291,6 +332,7 @@ ros2 service call /image_counter std_srvs/srv/Trigger {}
 # Get specific field information from an echo terminal command
 ros2 topic echo /odometry/filtered --field pose.pose
 ```
+-->
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
