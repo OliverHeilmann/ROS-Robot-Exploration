@@ -3,17 +3,21 @@
 # Allow local X11 server to be accessed
 xhost +local:root || echo "xhost not found. Continuing without it."
 
+# Check if TEMP_ROS_WS is set, set to default if not
+if [ -z ${TEMP_ROS_WS+x} ]; then
+    echo "TEMP_ROS_WS is not set. Using default value '/ROS-Robot-Exploration'"
+    export TEMP_ROS_WS=/ROS-Robot-Exploration
+
 # Check if the workspace directory exists and has the expected structure
-if [ ! -d "$TEMP_ROS_WS" ]; then
+elif [ ! -d "$TEMP_ROS_WS" ]; then
     echo "Creating ROS workspace directories at ${TEMP_ROS_WS}"
     mkdir -p ${TEMP_ROS_WS}
 fi
 
-# Check if ROS_DISTRO is set, set to default if not
+# Check if ROS_DISTRO is set, if not, find the appropriate ROS_DISTRO
 if [ -z ${ROS_DISTRO+x} ]; then
-    echo "ROS_DISTRO is not set. Using default value 'humble"
-    export ROS_DISTRO=humble
-    exit 1
+    echo "ROS_DISTRO is not set. Finding the appropriate ROS_DISTRO (make sure it is installed)."
+    export ROS_DISTRO=$(ls /opt/ros/ | grep -v latest | sort -r | head -n 1) || echo "ROS_DISTRO not found, is ROS installed? Exiting." && exit 1
 fi
 
 # cd into the ROS-Robot-Exploration directory if not already there

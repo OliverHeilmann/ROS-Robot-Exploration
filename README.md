@@ -14,8 +14,40 @@ This project aims to build robotic systems using ROS2 and physics simulators suc
 ![RViz Screenshot 3](images/transforms.png)
 ![RViz Screenshot 2](images/KCF-tracking.png)
 
-
 ## Getting Started
+### Using Host Machine
+To run this project on your host machine, you will need to have ROS2 humble installed on a Ubuntu 22.04 system. If you do not have ROS2 installed, you can follow the instructions on the [ROS2 humble website](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html).
+
+Once you have ROS2 installed, you can clone this repository and build the project using the following commands:
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/OliverHeilmann/ROS-Robot-Exploration --recurse-submodules
+    cd ROS-Robot-Exploration
+    ```
+
+2. Install the necessary dependencies and build the project:
+
+    ```bash
+    chmod +x entrypoint.sh
+    ./entrypoint.sh
+    ```
+
+3. Launch Gazebo:
+
+    ```bash
+    ROSBOT_SIM
+    ```
+
+4. Launch the Exploration ROSbot code (new terminal):
+
+    ```bash
+    ros2 launch rosbot explore.launch.py use_gazebo:=true
+    ```
+
+
+### Using Docker
 Here, we are using Docker to make the setup process easier. The Docker container will have ROS2 installed and the ROSbot simulation running. Additionally, all the GUI tools will be forwarded to the host machine so you can run this project on any machine that supports Docker! There are a few things to setup if you are using a Mac or Windows machine first however (see below).
 
 ### Linux
@@ -47,13 +79,16 @@ WIP! Need to check if X11 forwarding works on Windows. If not, will need to use 
     ./run.sh
     ```
 
-3. Launch Gazebo (Note: works on Ubuntu 22.04, some isses with X11 forwarding Ubutnu 20.04):
+3. Launch Gazebo in a new terminal (Note: works on Ubuntu 22.04, some isses with X11 forwarding Ubuntu 20.04):
 
     ```bash
     docker exec -it ros_robot_exploration /bin/bash
 
     # Then inside the container
     ROSBOT_SIM
+
+    # Alternatively, launch headless (may work on Ubuntu 20.04 depending on your setup)
+    ros2 launch rosbot_xl_gazebo simulation.launch.py headless:=True
     ```
 
 4. Launch the Exploration ROSbot code (new terminal):
