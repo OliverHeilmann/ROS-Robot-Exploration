@@ -5,8 +5,8 @@ xhost +local:root || echo "xhost not found. Continuing without it."
 
 # Check if TEMP_ROS_WS is set, set to default if not
 if [ -z ${TEMP_ROS_WS+x} ]; then
-    echo "TEMP_ROS_WS is not set. Using default value '/ROS-Robot-Exploration'"
-    export TEMP_ROS_WS=/ROS-Robot-Exploration
+    echo "TEMP_ROS_WS is not set. Using default value as current directory."
+    export TEMP_ROS_WS=$(pwd)
 
 # Check if the workspace directory exists and has the expected structure
 elif [ ! -d "$TEMP_ROS_WS" ]; then
