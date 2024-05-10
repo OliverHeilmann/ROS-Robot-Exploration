@@ -29,6 +29,10 @@ else
     exit 1
 fi
 
+# install dependencies from dependencies.sh
+chmod +x dependencies.sh
+./dependencies.sh
+
 # Setup Husarian submodule
 export HUSARION_ROS_BUILD=simulation
 sudo apt-get update
