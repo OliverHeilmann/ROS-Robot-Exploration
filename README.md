@@ -47,7 +47,7 @@ WIP!
     ./run.sh
     ```
 
-3. Launch Gazebo:
+3. Launch Gazebo (note: some issues with launching GUI through docker - will fix!):
 
     ```bash
     docker exec -it ros_robot_exploration /bin/bash
