@@ -2,7 +2,7 @@
 
 This project aims to build robotic systems using ROS2 and physics simulators such as Gazebo. So far, the Husarion ROSbot has been used for autonomous exploration and mapping. Next, a similar system build is achieved with a Clearpath Robotics robot (`a200_0000`). The project is still in progress and will be updated as new features are added.
 
-## Progress So Far
+## Progress So Far...
 
 ![Clearpath 1](images/Clearpath1.png)
 ![RViz Screenshot 6](images/Explore1.png)
@@ -47,7 +47,7 @@ WIP! Need to check if X11 forwarding works on Windows. If not, will need to use 
     ./run.sh
     ```
 
-3. Launch Gazebo (note: some issues with launching GUI through docker - will fix!):
+3. Launch Gazebo (Note: works on Ubuntu 22.04, some isses with X11 forwarding Ubutnu 20.04):
 
     ```bash
     docker exec -it ros_robot_exploration /bin/bash
@@ -240,7 +240,7 @@ ros2 launch clearpath_gz simulation.launch.py setup_path:=$HOME/ROS-Robot-Explor
 ros2 launch clearpath_gz simulation.launch.py world:=my_world
 ```
 
-
+<!--
 ### Useful Commands
 ```sh
 # clone a repository as a submodule (ensure it is not gitignored)
@@ -297,6 +297,7 @@ ros2 service call /image_counter std_srvs/srv/Trigger {}
 # Get specific field information from an echo terminal command
 ros2 topic echo /odometry/filtered --field pose.pose
 ```
+-->
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
