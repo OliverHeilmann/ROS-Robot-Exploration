@@ -30,7 +30,7 @@ To forward X11 from inside a docker container to a host running macOS
 4. Restart XQuartz and Docker Desktop (if running). If you experience any issues, restart your computer as well or follow this [Gist](https://gist.github.com/cschiewek/246a244ba23da8b9f0e7b11a68bf3285) guide.
 
 ### Windows
-WIP!
+WIP! Need to check if X11 forwarding works on Windows. If not, will need to use VcXsrv or similar.
 
 ### Building and Running the Project
 1. Clone the repository:
@@ -72,6 +72,12 @@ WIP!
     ``` -->
 
 That's it! You should now have a Gazebo simulation running with the ROSbot exploring the environment.
+
+*Note: If you are experiencing issues stopping the docker container, try using the command below (taken from [Stack Overflow issue](https://stackoverflow.com/questions/47223280/docker-containers-can-not-be-stopped-or-removed-permission-denied-error)):*
+
+```bash
+ sudo aa-remove-unknown
+```
 
 ## Useful Information and Guides
 ### Networking with ROS2

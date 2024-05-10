@@ -13,13 +13,16 @@
 # Build the docker container from the Dockerfile.ROS2 file
 docker build -t ros_robot_exploration -f Dockerfile.ROS2 .
 
+# Set the container name and allow permissions to X11 for showing GUI through docker
+export CONTAINER=ros_robot_exploration
+xhost +local:`docker inspect --format='{{ .Config.Hostname }}' $CONTAINER`
+
 # Allow permissions to X11 for showing GUI through docker
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     xhost +local:root
-    export CONTAINER=ros_robot_exploration
     docker run -dt --rm  \
         --name $CONTAINER \
-        --env="DISPLAY" \
+        --env="DISPLAY=$DISPLAY" \
         --env="QT_X11_NO_MITSHM=1" \
         --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
         --device /dev/dri:/dev/dri \
@@ -31,7 +34,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install socat
     nohup socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\" &
-    export CONTAINER=ros_robot_exploration
     docker run -dt --rm \
         --name $CONTAINER \
         --env="DISPLAY=host.docker.internal:0" \
