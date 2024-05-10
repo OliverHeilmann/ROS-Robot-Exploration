@@ -67,10 +67,11 @@ if ! grep -q "alias ROSBOT_SIM='ros2 launch rosbot_xl_gazebo simulation.launch.p
 fi
 
 # Update the workspace/ environment with the new packages
-source ${TEMP_ROS_WS}/install/setup.bash || exit 1
+source /opt/ros/${ROS_DISTRO}/setup.bash|| exit 1
 
 # # Now everything is set up, build the mounted project workspace
 colcon build --symlink-install
+source ${TEMP_ROS_WS}/install/setup.bash
 
 # Execute the command specified as CMD in Dockerfile or as command in docker run
 exec "$@"
