@@ -2,18 +2,11 @@
 
 This project aims to build robotic systems using ROS2 and physics simulators such as Gazebo. So far, the Husarion ROSbot has been used for autonomous exploration and mapping. Next, a similar system build is achieved with a Clearpath Robotics robot (`a200_0000`). The project is still in progress and will be updated as new features are added.
 
-## Progress So Far...
+Readers are welcome to jump straight to the [Robot Exploration](#5-exploration) section for the Husarion ROSbot robot exporation work, or to [Clearpath Robotics](#7-clearpath-robotics) to control the `a200_0000` Clearpath robot. 
 
-
-![Clearpath 1](images/Clearpath1.png)
-![RViz Screenshot 6](images/Explore1.png)
-![RViz Screenshot 6](images/Explore2.png)
-![RViz Screenshot 6](images/Explore3.png)
 ![RViz Screenshot 6](images/Navigation.png)
-![RViz Screenshot 5](images/amcl.png)
-![RViz Screenshot 4](images/2D-Slam.png)
 
-![RViz Screenshot 2](images/KCF-tracking.png)
+![Clearpath 2](images/Namespace-Clearpath.png)
 
 ## Getting Started
 ### Using Host Machine (stable)
@@ -116,7 +109,7 @@ That's it! You should now have a Gazebo simulation running with the ROSbot explo
 ```
 
 # Running the Project(s)
-Readers are welcome to jump straight to the [Robot Exploration]() section for the Husarion ROSbot robot exporation work, or to [Clearpath Robotics]() to control the `a200_0000` Clearpath robot. Several "stepping stone" projects have been included below first, as they were useful in developing my knoweldge of ROS during the development process. Feel free to read through them and try the examples out for yourselves!
+Readers are welcome to jump straight to the [Robot Exploration](#5-exploration) section for the Husarion ROSbot robot exporation work, or to [Clearpath Robotics](#7-clearpath-robotics) to control the `a200_0000` Clearpath robot. Several "stepping stone" projects have been included below first, as they were useful in developing my knoweldge of ROS during the development process. Feel free to read through them and try the examples out for yourselves!
 
 ## 1) Transformations
 Running static transforms through through the terminal can useful for understanding the tf2 library. Below is an example of how to run static transforms between the map, robot, and camera frames and visualize them in RViz. See below for the transformation arguments:
@@ -164,7 +157,7 @@ ros2 launch rosbot tf_broadcaster.yaml
 ## 2) OpenCV and Object Tracking
 This project demonstrates how to use OpenCV to track objects in a video stream. The `cv_bridge` package is used to convert ROS messages to OpenCV images and vice versa. Specifically, the `cv_bridge` package is used to convert the image from `cv::Mat` to `sensor_msgs::msg::Image` and vice versa. The KCF tracker from the OpenCV library is then used to determine the new position of the object.
 
-See the [tracker.cpp](src/rosbot/src/tracker.cpp) and [tracker.hpp](src/rosbot/include/tracker.hpp) files for the implementation of the tracker. To run the tracker, use the following command:
+See the [tracker.cpp](src/rosbot/src/tracker.cpp) and [tracker.hpp](src/rosbot/include/rosbot/tracker.hpp) files for the implementation of the tracker. To run the tracker, use the following command:
 
 ```sh
 # Terminal 1: Launch the tracker node
@@ -179,6 +172,8 @@ rviz2 -d src/rosbot/rviz/rosbot.rviz
 
 *Note: The above separate commands can be combined into a single launch file... have done this in later sections.*
 
+![RViz Screenshot 2](images/KCF-tracking.png)
+
 ## 3) SLAM and AMCL (Adaptive Monte-Carlo Localisation)
 To perform SLAM, you can use the `slam_toolbox` package. This package provides a set of tools for 2D and 3D SLAM. The package has been installed as part of the `dependencies.sh` script.
 
@@ -192,15 +187,7 @@ ROSBOT_SIM
 ros2 launch rosbot slam.launch.py use_sim_time:=true
 ```
 
-Loading saved maps is shown below:
-
-```sh
-# To load a saved map, navigate to the map directory and run the below command
-ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=<your-map-name>.yaml
-
-# Then run the map server to load it into RVIZ
-ros2 run nav2_util lifecycle_bringup map_server
-```
+![RViz Screenshot 4](images/2D-Slam.png)
 
 To use `Adaptive Monte Carlo Location` with ROS2, we can use the `amcl` package. This package provides a probabilistic localisation system for a robot moving in 2D. This repository comes with a map.yaml and map.pgm file for the map of the environment (which is required for AMCL). Test this out using the following commands:
 
@@ -209,8 +196,20 @@ To use `Adaptive Monte Carlo Location` with ROS2, we can use the `amcl` package.
 ROSBOT_SIM
 
 # Terminal 2: To launch the AMCL package
-ros2 launch rosbot amcl.launch.py use_sim_time:=true
+ros2 launch rosbot amcl.launch.py
 ```
+
+Loading saved maps and using them in the navigation stack can be done using the following commands:
+
+```sh
+# Terminal 3: To load a saved map, navigate to the map directory and run the below command
+ros2 run nav2_map_server map_server --ros-args -p yaml_filename:=<your-map-name>.yaml
+
+# Terminal 4: Then run the map server to load it into RVIZ
+ros2 run nav2_util lifecycle_bringup map_server
+```
+
+![RViz Screenshot 5](images/amcl.png)
 
 ## 4) Navigation
 To perform navigation, you can use the `nav2` package. This package provides a set of tools for 2D and 3D navigation. The package has been installed as part of the `dependencies.sh` script.
@@ -224,18 +223,46 @@ ros2 launch rosbot navigation.launch.py
 
 More detail (and links to even further detail) can be found on [Husarion Docs](https://husarion.com/tutorials/ros2-tutorials/9-navigation/) but, for my own reference, below are some high level comments on navigation2 principles:
 
-- `amcl` - adaptive Monte Carlo location used for localisation of the robot. It uses a particle filter to estimate the robot's position on a *known* map.
-- `behavior_server` - to configure recovery behavior, for instance when the robot is stuck.
-- `bt_navigator` - allows you to change the behavior of services to create a unique robot behavior (default behavior tree will be used).
-- `controller_server` - reates a local costmap and implements the server for handling the controller requests. Consider how the controller is responsible for taking actions which will move the robot to the goal, but ensuring that the robot avoids obstacles and stays on the intended path. An example is `Regulated Pure Pursuit` which adjusts "steering" based on a look ahead distance to the intended path (some similarities to PID controllers for smoothing robot motion).
-- `local_costmap/global_costmap` - The costmap is created based on the provided map and data from sensors such as cameras and laser scanners that measure whether there are obstacles in the way. Then it creates a special map where each spot has a "cost" value. `local_costmap` is used for local planning and `global_costmap` is used for global planning, where local planning is used to avoid obstacles and global planning is used to find the shortest path to the goal.
-- `Smoother Server` - creates smoother path plans to be more continuous and feasible. This may be useful for robots with non-holonomic constraints e.g. ackermann steering. Consider inflating the costmap to account for the robot's footprint and turning radius.
-- `planner_server` - related to the selection and fine-tuning of the global path,
-- `waypoint_follower` - related to following a multi-point route,
-- `velocity_smoother` - to smooth out the robot's motion.
+- Three main aspects of navigation when implemented:
+    - `Costmap`: environment representation of the *effort* or *cost* to move through space.
+    - `Planner`: the algorithm that determines the path to the goal (**graph** or **occupancy grid** methods, think of A* etc.).
+    - `Controller`: the algorithm that determines how to move the robot along the path e.g. PID controllers or Regulated Pure Pursuit.
+
+- Some specific functionalities for `nav2`:
+    - `planner_server` - related to the selection and fine-tuning of the global path,
+    - `controller_server` - reates a local costmap and implements the server for handling the controller requests. Consider how the controller is responsible for taking actions which will move the robot to the goal, but ensuring that the robot avoids obstacles and stays on the intended path. An example is `Regulated Pure Pursuit` which adjusts "steering" based on a look ahead distance to the intended path (some similarities to PID controllers for smoothing robot motion).
+    - `behavior_server` - to configure recovery behavior, for instance when the robot is stuck.
+    - `bt_navigator` - allows you to change the behavior of services to create a unique robot behavior (default behavior tree will be used).
+    - `Smoother Server` - creates smoother path plans to be more continuous and feasible. This may be useful for robots with non-holonomic constraints e.g. ackermann steering. Consider inflating the costmap to account for the robot's footprint and turning radius.
+
+- Some specific parameters for `nav2` configuration:
+    - `amcl` - used for localisation of the robot. It uses a particle filter to estimate the robot's position on a *known* map.
+    - `local_costmap/global_costmap` - The costmap is created based on the provided map and data from sensors such as cameras and laser scanners that measure whether there are obstacles in the way. Then it creates a special map where each spot has a "cost" value. `local_costmap` is used for local planning and `global_costmap` is used for global planning, where local planning is used to avoid obstacles and global planning is used to find the shortest path to the goal.
+    - `waypoint_follower` - related to following a multi-point route,
+    - `velocity_smoother` - to smooth out the robot's motion.
+
+![RViz Screenshot 6](images/Navigation.png)
 
 
-### Joystick Robot Control
+## 5) Exploration
+To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. The package has been installed as part of the `dependencies.sh` script.
+
+*"The node relies on the occupancy map generated by slam_toolbox, on the basis of which it selects a point to discover an unexplored area. After reaching the selected point, the map algorithm is expanded and the robot heads to the next point. This process is repeated until all boundaries have been explored."* [Husarion Docs](https://husarion.com/tutorials/ros2-tutorials/10-exploration/#introduction)
+
+```sh
+# Terminal 1: Launch Gazebo simulator
+ROSBOT_SIM
+
+# Terminal 2: To launch the exploration node and RVIZ
+ros2 launch rosbot explore.launch.py use_gazebo:=true
+```
+
+![RViz Screenshot 6](images/Explore1.png)
+![RViz Screenshot 6](images/Explore2.png)
+![RViz Screenshot 6](images/Explore3.png)
+
+
+## 6) Joystick Robot Control
 Use a joystick to control the robot. The `joy` package provides a node that interfaces with a joystick and publishes the joystick commands to the `/joy` topic. To use the package, run the following commands:
 
 ```sh
@@ -255,14 +282,8 @@ ros2 topic echo /joy
 ros2 launch rosbot joystick.launch.py
 ```
 
-### Exploration
-To perform exploration, you can use the `explore_lite` package. This package provides a lightweight exploration algorithm for a robot moving in 2D. To install the package, run the following command (after running Gazebo):
 
-```sh
-ros2 launch rosbot explore.launch.py use_gazebo:=true
-```
-
-### Clearpath Robotics
+## 7) Clearpath Robotics
 To use the Clearpath Robotics simulation environment within this workspace, you will have to  add a `robot.yaml` file to the `modules/clearpath/` directory, which can be found in the [Clearpath Documentation](https://docs.clearpathrobotics.com/docs/ros/config/yaml/overview#sample) for example.
 
 Now launch the simulation using the following command:
@@ -271,12 +292,15 @@ Now launch the simulation using the following command:
 # Make sure to add the path to your clearpath directory - this repo has it in the following location
 ros2 launch clearpath_gz simulation.launch.py setup_path:=$HOME/ROS-Robot-Exploration/modules/clearpath/
 
-# Change the world to your desired world
+# Change the world to your desired world, example below:
 ros2 launch clearpath_gz simulation.launch.py world:=my_world
 ```
 
 Make sure to add the correct namespace before teleoperating the rover, as shown below:
 ![Clearpath 2](images/Namespace-Clearpath.png)
+
+Using the WASD keys, you should be able to drive the robot around the environment.
+![Clearpath 1](images/Clearpath1.png)
 
 <!--
 ### Useful Commands
