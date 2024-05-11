@@ -286,6 +286,30 @@ ros2 launch rosbot joystick.launch.py
 ## 7) Clearpath Robotics
 To use the Clearpath Robotics simulation environment within this workspace, you will have to  add a `robot.yaml` file to the `modules/clearpath/` directory, which can be found in the [Clearpath Documentation](https://docs.clearpathrobotics.com/docs/ros/config/yaml/overview#sample) for example.
 
+Clearpath require a `robot.yaml` file which is used to configure the robot. This file is used to define the robot's kinematics, sensors, and other parameters. Create a `robot.yaml` file in the `modules/clearpath/` directory with the following content (noting your workspace path may be different):
+
+```yaml
+serial_number: a200-0000
+version: 0
+system:
+  username: administrator
+  hosts:
+    - hostname: cpr-a200-0000
+      ip: 192.168.131.1
+  ros2:
+    namespace: a200_0000
+    domain_id: 0
+    middleware:
+      implementation: rmw_fastrtps_cpp
+    workspaces:
+      - "/home/parallels/ROS-Robot-Exploration/install/setup.bash"
+platform:
+  controller: ps4
+  battery:
+    model: ES20_12C
+    configuration: S2P1
+```
+
 Now launch the simulation using the following command:
 
 ```sh
