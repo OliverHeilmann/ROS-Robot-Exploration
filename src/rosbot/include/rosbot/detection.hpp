@@ -125,14 +125,6 @@ private:
   /**
    * @brief 
    * 
-   * @param match 
-   * @return cv::Point 
-   */
-  cv::Point _getCentre(Match &match);
-
-  /**
-   * @brief 
-   * 
    * @param frame 
    * @param match 
    */

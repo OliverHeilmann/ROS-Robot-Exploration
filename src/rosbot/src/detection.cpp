@@ -195,13 +195,9 @@ void Detection::_detect(cv::Mat &frame, std::vector<Match> &output)
     }
 }
 
-cv::Point Detection::_getCentre(Match &match)
-{
-    return cv::Point(match.box.x + match.box.width / 2, match.box.y + match.box.height / 2);
-}
-
 void Detection::_drawBox(cv::Mat &frame, Match &match)
 {
+    cv::putText(frame, "Detection: " + _classes[match.class_id], cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 2);
     cv::rectangle(frame, match.box, cv::Scalar(0, 255, 0), 2);
     cv::putText(frame, _classes[match.class_id], cv::Point(match.box.x, match.box.y - 5), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 2);
 }
