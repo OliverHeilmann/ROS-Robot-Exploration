@@ -69,12 +69,25 @@ ament_target_dependencies(${EXECUTABLE_NAME_4}
   tf2_ros
 )
 
+# An object detection executable demonstrating some OpenCV features
+set(EXECUTABLE_NAME_5 detection)
+add_executable(${EXECUTABLE_NAME_5} src/detection.cpp)
+ament_target_dependencies(${EXECUTABLE_NAME_5}
+  rclcpp
+  OpenCV
+  cv_bridge
+  geometry_msgs
+  sensor_msgs
+  std_msgs
+)
+
 # Install the executable into the package (so it can be called with ros2 run pkg ...)
 install(TARGETS
   ${EXECUTABLE_NAME_1}
   ${EXECUTABLE_NAME_2}
   ${EXECUTABLE_NAME_3}
   ${EXECUTABLE_NAME_4}
+  ${EXECUTABLE_NAME_5}
   DESTINATION lib/${PROJECT_NAME}
 )
 

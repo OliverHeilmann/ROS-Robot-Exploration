@@ -1,0 +1,11 @@
+rosbot:
+  ros__parameters:
+    use_sim_time: True
+    path_to_classes: "src/rosbot/models/classes.txt"
+    path_to_weights: "src/rosbot/models/yolov5s.onnx"
+    is_cuda: false
+    input_width: 640
+    input_height: 640
+    score_threshold: 0.2
+    confidence_threshold: 0.5
+    nms_threshold: 0.4
