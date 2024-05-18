@@ -23,6 +23,8 @@ find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+find_package(rosbot_msgs REQUIRED)  # This is the custom message package
+
 # Include directories
 include_directories(
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -79,6 +81,7 @@ ament_target_dependencies(${EXECUTABLE_NAME_5}
   geometry_msgs
   sensor_msgs
   std_msgs
+  rosbot_msgs
 )
 
 # Install the executable into the package (so it can be called with ros2 run pkg ...)

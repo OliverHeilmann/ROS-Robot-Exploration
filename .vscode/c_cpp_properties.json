@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/install/**",
                 "/opt/ros/humble/**",
                 "/usr/include/opencv4"
             ],
