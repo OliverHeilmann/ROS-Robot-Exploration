@@ -3,6 +3,9 @@
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
 
+// include custom message type for detections
+#include "rosbot_msgs/msg/detections.hpp"
+
 #include <string>
 #include <fstream>
 #include <filesystem>
@@ -14,14 +17,14 @@ Detection::Detection() : Node("Detection"), _is_detection_initialised(false)
     // print current path
     RCLCPP_INFO(get_logger(), "Current path: %s", std::filesystem::current_path().c_str());
 
-    _classes_path = init_parameter<std::string>("path_to_classes", "src/rosbot/models/classes.txt");
-    _model_path = init_parameter<std::string>("path_to_weights", "src/rosbot/models/yolov5s.onnx");
-    _is_cuda = init_parameter<bool>("is_cuda", false);
-    _input_width = init_parameter<int>("_input_width", 640);
-    _input_height = init_parameter<int>("_input_height", 640);
-    _score_threshold = init_parameter<float>("score_threshold", 0.2);
-    _confidence_threshold = init_parameter<float>("confidence_threshold", 0.5);
-    _nms_threshold = init_parameter<float>("nms_threshold", 0.4);
+    _classes_path = _initParameter<std::string>("path_to_classes", "src/rosbot/models/classes.txt");
+    _model_path = _initParameter<std::string>("path_to_weights", "src/rosbot/models/yolov5s.onnx");
+    _is_cuda = _initParameter<bool>("is_cuda", false);
+    _input_width = _initParameter<int>("input_width", 640);
+    _input_height = _initParameter<int>("input_height", 640);
+    _score_threshold = _initParameter<float>("score_threshold", 0.2);
+    _confidence_threshold = _initParameter<float>("confidence_threshold", 0.5);
+    _nms_threshold = _initParameter<float>("nms_threshold", 0.4);
 
     // Subscribers
     _img_sub = create_subscription<sensor_msgs::msg::Image>("/image", rclcpp::SensorDataQoS(), bind(&Detection::_imageCallback, this, _1));
@@ -39,11 +42,10 @@ void Detection::_imageCallback(const sensor_msgs::msg::Image::SharedPtr msg)
     // Convert the image message to an OpenCV Mat
     cv_bridge::CvImagePtr cv_image = cv_bridge::toCvCopy(msg, "bgr8");
     cv::Mat frame = cv_image->image;
-    cv::Rect obj;
 
-    if (!_is_detection_initialised)
+    if (!_is_detection_initialised)     // not sure I like that this is called every time an image is received...
     {
-        _initDetection(frame, obj);
+        _initDetection();
     }
 
     // MAIN DETECTION LOGIC GOES HERE //
@@ -55,12 +57,13 @@ void Detection::_imageCallback(const sensor_msgs::msg::Image::SharedPtr msg)
         _drawBox(frame, match);
     }
 
+    // Publish the image with the detected objects
     cv_image->image = frame;
     auto img_msg = cv_image->toImageMsg();
     _detection_pub->publish(*img_msg);
 }
 
-void Detection::_initDetection(cv::Mat frame, cv::Rect obj)
+void Detection::_initDetection()
 {
     // load classes
     _classes = _loadClassList(_classes_path);
@@ -115,7 +118,7 @@ void Detection::_loadNet(cv::dnn::Net &net, bool is_cuda, const std::string &pat
     net = result;
 }
 
-cv::Mat Detection::_format_to_yolo(const cv::Mat &source)
+cv::Mat Detection::_formatToYolo(const cv::Mat &source)
 {
     int col = source.cols;
     int row = source.rows;
@@ -129,7 +132,7 @@ void Detection::_detect(cv::Mat &frame, std::vector<Match> &output)
 {
     cv::Mat blob;
 
-    auto input_image = _format_to_yolo(frame);
+    auto input_image = _formatToYolo(frame);
     
     cv::dnn::blobFromImage(input_image, blob, 1./255., cv::Size(_input_width, _input_height), cv::Scalar(), true, false);
     _net.setInput(blob);
@@ -183,7 +186,7 @@ void Detection::_detect(cv::Mat &frame, std::vector<Match> &output)
 
     std::vector<int> nms_result;
     cv::dnn::NMSBoxes(boxes, confidences, _score_threshold, _nms_threshold, nms_result);
-    for (int i = 0; i < nms_result.size(); i++)
+    for (long unsigned int i = 0; i < nms_result.size(); i++)
     {
         RCLCPP_INFO(get_logger(), "Detected %s with confidence %f", _classes[class_ids[i]].c_str(), confidences[i]);
         int idx = nms_result[i];
