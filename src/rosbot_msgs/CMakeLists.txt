@@ -15,6 +15,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 # Build custom message type for detection
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/Match.msg"
   "msg/Detections.msg"
   DEPENDENCIES sensor_msgs
 )

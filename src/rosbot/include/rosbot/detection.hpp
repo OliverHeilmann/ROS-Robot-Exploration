@@ -3,6 +3,8 @@
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <rosbot_msgs/msg/match.hpp>   // custom message type
+#include "rosbot_msgs/msg/detections.hpp" // custom message type
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -33,6 +35,8 @@ public:
 
 private:
   void _imageCallback(const sensor_msgs::msg::Image::SharedPtr msg);
+
+  rosbot_msgs::msg::Detections _convertToDetectionsMsg(std::shared_ptr<sensor_msgs::msg::Image> image, std::vector<Match> &matches);
 
   void _initDetection();
   std::vector<std::string> _loadClassList(const std::string &path);
@@ -78,6 +82,7 @@ private:
    */
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr _img_sub;
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr _detection_pub;
+  rclcpp::Publisher<rosbot_msgs::msg::Detections>::SharedPtr _detection_detailed_pub;
 
   /**
    * @brief Load the classes and the model for the detection application.

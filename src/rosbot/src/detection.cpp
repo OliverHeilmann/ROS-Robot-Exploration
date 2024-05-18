@@ -3,9 +3,6 @@
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
 
-// include custom message type for detections
-#include "rosbot_msgs/msg/detections.hpp"
-
 #include <string>
 #include <fstream>
 #include <filesystem>
@@ -31,6 +28,13 @@ Detection::Detection() : Node("Detection"), _is_detection_initialised(false)
 
     // Publishers
     _detection_pub = create_publisher<sensor_msgs::msg::Image>("/detections", rclcpp::SensorDataQoS());
+
+    // Note: the purpose of this publisher is to attach the detected objects struct data to the corresponding image
+    //       so that the subscriber nodes can get the coordinates of the detected objects. The _detection_pub is used
+    //       should not be used _as well_ because this would result in the same image being published twice, with all
+    //       the overhead that comes with it (e.g. bandwidth, processing time, etc.). We can't simply publish the 
+    //       detection image in one topic and the detection struct in another because they may not be in sync.
+    _detection_detailed_pub = create_publisher<rosbot_msgs::msg::Detections>("/detections_detailed", rclcpp::SensorDataQoS());
 
     RCLCPP_INFO(get_logger(), "Detection Node started!");
 }
@@ -61,6 +65,33 @@ void Detection::_imageCallback(const sensor_msgs::msg::Image::SharedPtr msg)
     cv_image->image = frame;
     auto img_msg = cv_image->toImageMsg();
     _detection_pub->publish(*img_msg);
+
+    // Publish the detailed detections
+    _detection_detailed_pub->publish(_convertToDetectionsMsg(img_msg, matches));
+}
+
+rosbot_msgs::msg::Detections Detection::_convertToDetectionsMsg(std::shared_ptr<sensor_msgs::msg::Image> image, std::vector<Match> &matches)
+{
+    auto msg = rosbot_msgs::msg::Detections();
+    msg.image = *image;
+
+    // Convert each Match struct to a rosbot::msg::Match message and add to the Detections message vector
+    for (const auto &match : matches)
+    {
+        rosbot_msgs::msg::Match match_msg;
+        match_msg.class_id = match.class_id;
+        match_msg.confidence = match.confidence;
+        match_msg.box = {match.box.x,
+                        match.box.y,
+                        match.box.width,
+                        match.box.height};
+        match_msg.color = {static_cast<float>(match.color[0]),
+                            static_cast<float>(match.color[1]),
+                            static_cast<float>(match.color[2]),
+                            static_cast<float>(match.color[3])};
+        msg.matches.push_back(match_msg);
+    }
+    return msg;
 }
 
 void Detection::_initDetection()
